@@ -189,14 +189,13 @@ export function selectPoint(value) {
     if (hasAnswered || currentPlayer.usedPoints.includes(value)) return;
     
     currentPlayer.selectedPoint = value;
-    // Import and use database here to avoid circular dependency
+    // Use the imported QuizDatabase directly
     import('./database.js').then(module => {
         module.QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
     });
     
     renderPointsGrid();
 }
-
 export function showLobby() {
     hideAllScreens();
     document.getElementById('lobbyScreen').classList.add('active');

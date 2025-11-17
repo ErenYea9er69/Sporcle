@@ -6,14 +6,37 @@ import {
 } from './config.js';
 import { initErrorHandlers, logError } from './error-handler.js';
 import { QuizDatabase } from './database.js';
-import { backToHome, startSoloGame, createRoom, joinRoom, startGame, submitAnswer, nextRound, playAgain, toggleAutoNext } from './game.js';
-import { updateLobbyDisplay, updateGameDisplay, renderCategories, toggleCategory } from './ui.js';
+import { backToHome, startSoloGame, createRoom, joinRoom, startGame, submitAnswer, nextRound, playAgain, toggleAutoNext, endGame } from './game.js';
+import { updateLobbyDisplay, updateGameDisplay, renderCategories, toggleCategory, showCreateRoom, hideCreateRoom, showJoinRoom, hideJoinRoom, showLobby } from './ui.js';
 import { fuzzyMatch } from './questions.js';
 
 // Initialize error handlers
 initErrorHandlers();
 
-// Add input validation
+// Expose all functions to global scope for HTML onclick handlers
+window.QuizBattle = {
+    // UI functions
+    showCreateRoom,
+    hideCreateRoom,
+    showJoinRoom,
+    hideJoinRoom,
+    toggleCategory,
+    selectPoint: (value) => import('./ui.js').then(m => m.selectPoint(value)),
+    
+    // Game functions
+    createRoom,
+    joinRoom,
+    startGame,
+    submitAnswer,
+    nextRound,
+    endGame: () => import('./game.js').then(m => m.endGame()),
+    backToHome,
+    playAgain,
+    startSoloGame,
+    toggleAutoNext
+};
+
+// DOM ready initialization
 document.addEventListener('DOMContentLoaded', () => {
     try {
         const rooms = QuizDatabase.findAllRooms();
@@ -100,22 +123,6 @@ setInterval(() => {
         logError('Room cleanup failed', { error: error.message });
     }
 }, 10 * 60 * 1000);
-
-// Expose functions to global scope for HTML onclick handlers
-window.QuizBattle = {
-    createRoom,
-    joinRoom,
-    startGame,
-    submitAnswer,
-    nextRound,
-    endGame: () => import('./game.js').then(m => m.endGame()),
-    backToHome,
-    playAgain,
-    startSoloGame,
-    toggleCategory,
-    selectPoint: (value) => import('./ui.js').then(m => m.selectPoint(value)),
-    toggleAutoNext
-};
 
 // Handle page unload
 window.addEventListener('beforeunload', () => {
