@@ -133,7 +133,7 @@ function logError(message, context = {}) {
     // Store error locally
     const errors = QuizDatabase.load('errors') || [];
     errors.push(error);
-    if (errors.length > 50) errors.shift(); // Keep only last 50 errors
+    if (errors.length > 50) errors.shift();
     QuizDatabase.save('errors', errors);
 
     // Show error indicator
@@ -152,12 +152,9 @@ function logError(message, context = {}) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(error),
             keepalive: true
-        }).catch(() => {
-            // Fail silently for error reporting
-        });
+        }).catch(() => {});
     }
 
-    // Also log to console
     console.error('Quiz Battle Error:', error);
 }
 
@@ -183,64 +180,99 @@ function generateRoomCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-// NEW: Load questions from JSON files
+// Load questions from JSON files with enhanced error handling
 async function loadQuestionsFromFiles(categories) {
-    try {
-        const allQuestions = [];
-        
-        // Load questions from each category file
-        for (const category of categories) {
-            try {
-                // FIXED: Remove "questions/" prefix if files are in root directory
-                const response = await fetch(`${category}.json`);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.questions && Array.isArray(data.questions)) {
-                        // Add category info to each question
-                        const questionsWithCategory = data.questions.map(q => ({
-                            ...q,
-                            category: category
-                        }));
-                        allQuestions.push(...questionsWithCategory);
-                    }
-                } else {
-                    logError(`Failed to load category: ${category}`, { status: response.status });
-                }
-            } catch (fetchError) {
-                logError(`Error fetching ${category}.json`, { error: fetchError.message });
+    const allQuestions = [];
+    const loadErrors = [];
+
+    for (const category of categories) {
+        try {
+            const filename = `${category}.json`;
+            const response = await fetch(filename);
+            
+            if (!response.ok) {
+                const errorMsg = `Failed to load ${filename} (HTTP ${response.status})`;
+                loadErrors.push(errorMsg);
+                logError(errorMsg, { category, status: response.status });
+                continue;
             }
+
+            const data = await response.json();
+            
+            // Validate the data structure
+            if (!data.questions || !Array.isArray(data.questions)) {
+                const errorMsg = `Invalid format in ${filename}: missing 'questions' array`;
+                loadErrors.push(errorMsg);
+                logError(errorMsg, { category, dataKeys: Object.keys(data) });
+                continue;
+            }
+
+            if (data.questions.length === 0) {
+                const errorMsg = `${filename} contains no questions`;
+                loadErrors.push(errorMsg);
+                logError(errorMsg, { category });
+                continue;
+            }
+
+            // Add category info to each question
+            const questionsWithCategory = data.questions.map((q, index) => {
+                // Validate each question
+                if (!q.question || !q.answer || !Array.isArray(q.answer)) {
+                    logError(`Invalid question in ${filename} at index ${index}`, { question: q });
+                    return null;
+                }
+                return {
+                    ...q,
+                    category: category
+                };
+            }).filter(q => q !== null);
+
+            allQuestions.push(...questionsWithCategory);
+            console.log(`✅ Loaded ${questionsWithCategory.length} questions from ${filename}`);
+
+        } catch (fetchError) {
+            const errorMsg = `Error fetching ${category}.json: ${fetchError.message}`;
+            loadErrors.push(errorMsg);
+            logError(errorMsg, { category, error: fetchError.message });
         }
-
-        // If no questions loaded, use fallback
-        if (allQuestions.length === 0) {
-            logError('No questions loaded from files, using fallback');
-            return {
-                questions: [
-                    { question: "What is 2 + 2?", answer: ["4", "four"], points: 10, category: "knowledge" },
-                    { question: "What color is the sky?", answer: ["blue"], points: 10, category: "knowledge" },
-                    { question: "How many days in a week?", answer: ["7", "seven"], points: 10, category: "knowledge" }
-                ]
-            };
-        }
-
-        // Shuffle all questions
-        const shuffled = allQuestions.sort(() => Math.random() - 0.5);
-        
-        return {
-            questions: shuffled
-        };
-
-    } catch (error) {
-        logError('Failed to load questions from files', { categories, error: error.message });
-        // Return fallback questions
-        return {
-            questions: [
-                { question: "What is 2 + 2?", answer: ["4", "four"], points: 10, category: "knowledge" },
-                { question: "What color is the sky?", answer: ["blue"], points: 10, category: "knowledge" },
-                { question: "How many days in a week?", answer: ["7", "seven"], points: 10, category: "knowledge" }
-            ]
-        };
     }
+
+    // If no questions loaded, show error and fallback
+    if (allQuestions.length === 0) {
+        const errorSummary = loadErrors.join('\n• ');
+        alert(`❌ FAILED TO LOAD ALL QUESTION FILES!\n\nErrors:\n• ${errorSummary}\n\nThis usually means:\n1. JSON files are missing from the server\n2. Wrong file path\n3. Server permissions issue\n4. Running locally without a server (CORS)\n\nThe game will use fallback questions. Check browser console (F12) for details.`);
+        
+        logError('No questions loaded from any category', { 
+            categories, 
+            errors: loadErrors,
+            location: window.location.href 
+        });
+        
+        return createFallbackData();
+    }
+
+    // If some files failed, show warning
+    if (loadErrors.length > 0) {
+        console.warn(`⚠️ Loaded ${allQuestions.length} questions but had ${loadErrors.length} errors:`, loadErrors);
+    }
+
+    // Shuffle questions
+    const shuffled = allQuestions.sort(() => Math.random() - 0.5);
+    
+    return {
+        questions: shuffled
+    };
+}
+
+// Create fallback question data
+function createFallbackData() {
+    return {
+        questions: [
+            { question: "What is 2 + 2?", answer: ["4", "four"], points: 10, category: "knowledge" },
+            { question: "What color is the sky?", answer: ["blue"], points: 10, category: "knowledge" },
+            { question: "How many days in a week?", answer: ["7", "seven"], points: 10, category: "knowledge" }
+        ]
+    };
 }
 
 // Fuzzy matching algorithm
@@ -376,7 +408,7 @@ function renderCategories() {
     document.getElementById('createRoomForm').dataset.selectedCategories = JSON.stringify([]);
 }
 
-// NEW: Toggle category selection (multi-select)
+// Toggle category selection (multi-select)
 function toggleCategory(category) {
     const form = document.getElementById('createRoomForm');
     let selectedCategories = JSON.parse(form.dataset.selectedCategories || '[]');
@@ -412,18 +444,29 @@ async function createRoom() {
             return;
         }
 
+        // Show loading state
+        const createBtn = document.querySelector('#createRoomForm button[onclick="createRoom()"]');
+        const originalText = createBtn.textContent;
+        createBtn.textContent = 'Loading Questions...';
+        createBtn.disabled = true;
+
         // Load questions from selected categories
         const questionData = await loadQuestionsFromFiles(selectedCategories);
         
+        // Check if we got fallback data
+        if (questionData.questions.length <= 3 && questionData.questions[0].question === "What is 2 + 2?") {
+            console.warn('Using fallback questions - check previous alerts for details');
+        }
+
         const room = {
             code: generateRoomCode(),
-            categories: selectedCategories, // Store array of categories
+            categories: selectedCategories,
             timerDuration: timerDuration,
             questions: questionData.questions,
             players: [],
             currentRound: 0,
             isActive: false,
-            expires: Date.now() + (6 * 60 * 60 * 1000), // Expire in 6 hours
+            expires: Date.now() + (6 * 60 * 60 * 1000),
             created: Date.now(),
             autoNext: false
         };
@@ -445,17 +488,25 @@ async function createRoom() {
         QuizDatabase.save(`room_${room.code}`, room);
         QuizDatabase.save(`player_${player.id}`, player);
 
+        // Restore button state
+        createBtn.textContent = originalText;
+        createBtn.disabled = false;
+
         showLobby();
         startHeartbeat();
 
-        // Simulate loading for better UX
         setTimeout(() => {
             updateLobbyDisplay();
         }, 500);
 
     } catch (error) {
         logError('Failed to create room', { error: error.message });
-        alert('Failed to create room. Please try again.');
+        alert(`Failed to create room: ${error.message}`);
+        
+        // Restore button state
+        const createBtn = document.querySelector('#createRoomForm button[onclick="createRoom()"]');
+        createBtn.textContent = 'Create Room';
+        createBtn.disabled = false;
     }
 }
 
@@ -1186,7 +1237,7 @@ function startSoloGame() {
             players: [player],
             currentRound: 0,
             isActive: false,
-            expires: Date.now() + (2 * 60 * 60 * 1000), // 2 hours for solo
+            expires: Date.now() + (2 * 60 * 60 * 1000),
             created: Date.now(),
             autoNext: false,
             isSolo: true
@@ -1290,7 +1341,7 @@ document.getElementById('playerName').addEventListener('input', (e) => {
 });
 
 document.getElementById('answerInput').addEventListener('input', (e) => {
-    // Show fuzzy match score in real-time (optional feature)
+    // Show fuzzy match score in real-time
     if (currentQuestion && !hasAnswered) {
         const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
         if (matchScore > 0.7) {
@@ -1308,7 +1359,7 @@ window.addEventListener('beforeunload', () => {
     if (currentRoom && currentRoom.code && !currentRoom.isSolo) {
         // Mark player as disconnected
         if (currentPlayer) {
-            currentPlayer.lastSeen = Date.now() - 30000; // Mark as disconnected
+            currentPlayer.lastSeen = Date.now() - 30000;
             QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
         }
     }
@@ -1350,7 +1401,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Add version info
-        const version = '2.0.0';
+        const version = '2.0.1';
         document.documentElement.dataset.version = version;
         
         console.log('Quiz Battle initialized successfully');
