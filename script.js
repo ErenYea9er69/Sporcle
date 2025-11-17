@@ -1,32 +1,72 @@
-// Quiz Battle - Main JavaScript
+// Quiz Battle - Main JavaScript (Local Version)
 
-// Database wrapper for localStorage with fallback
-const QuizDatabase = {
-    // Check if localStorage is available
-    isAvailable: () => {
-        try {
-            const test = '__quizdb_test__';
-            localStorage.setItem(test, test);
-            localStorage.removeItem(test);
-            return true;
-        } catch (e) {
-            return false;
-        }
+// Embedded question data (no server needed)
+const EMBEDDED_QUESTIONS = {
+    anime: {
+        questions: [
+            { question: "What is the name of Goku's signature energy attack?", answer: ["kamehameha", "kame hame ha"], points: 10 },
+            { question: "Which anime features a notebook that can kill people?", answer: ["death note", "deathnote"], points: 10 },
+            { question: "What is the name of the pirate crew led by Monkey D. Luffy?", answer: ["straw hat pirates", "strawhat pirates", "straw hats"], points: 10 },
+            { question: "In 'Naruto', what is the name of Naruto's tailed beast?", answer: ["kurama", "nine tails", "nine-tails"], points: 10 },
+            { question: "Which anime features giant humanoid creatures called Titans?", answer: ["attack on titan", "shingeki no kyojin"], points: 10 }
+        ]
     },
+    football: {
+        questions: [
+            { question: "Which country won the FIFA World Cup in 2018?", answer: ["france"], points: 10 },
+            { question: "How many players are on a football team on the field?", answer: ["11", "eleven"], points: 10 },
+            { question: "Which player has won the most Ballon d'Or awards?", answer: ["lionel messi", "messi"], points: 10 },
+            { question: "What is the distance of a penalty kick from the goal line?", answer: ["12 yards", "11 meters", "eleven meters", "twelve yards"], points: 10 },
+            { question: "Which English club has won the most Premier League titles?", answer: ["manchester united", "man united", "man utd"], points: 10 }
+        ]
+    },
+    history: {
+        questions: [
+            { question: "Who was the first President of the United States?", answer: ["george washington", "washington"], points: 10 },
+            { question: "In which year did Christopher Columbus reach the Americas?", answer: ["1492"], points: 10 },
+            { question: "Which ancient wonder of the world still stands today?", answer: ["great pyramid of giza", "pyramids of giza", "great pyramid"], points: 10 },
+            { question: "Who wrote the Declaration of Independence?", answer: ["thomas jefferson", "jefferson"], points: 10 },
+            { question: "Which empire built Machu Picchu?", answer: ["inca", "incan", "inca empire"], points: 10 }
+        ]
+    },
+    knowledge: {
+        questions: [
+            { question: "What is the capital of Japan?", answer: ["tokyo"], points: 10 },
+            { question: "How many continents are there on Earth?", answer: ["7", "seven"], points: 10 },
+            { question: "What is the largest planet in our solar system?", answer: ["jupiter"], points: 10 },
+            { question: "What is the chemical symbol for gold?", answer: ["au"], points: 10 },
+            { question: "In which year did World War II end?", answer: ["1945"], points: 10 }
+        ]
+    },
+    manga: {
+        questions: [
+            { question: "Who is the creator of One Piece?", answer: ["eiichiro oda", "oda"], points: 10 },
+            { question: "What is the name of the training manga about a weak boy becoming a hero?", answer: ["one punch man", "one-punch man"], points: 10 },
+            { question: "Which manga features alchemy as its main power system?", answer: ["fullmetal alchemist", "full metal alchemist"], points: 10 },
+            { question: "What is the name of Guts' massive sword in Berserk?", answer: ["dragonslayer", "dragon slayer"], points: 10 },
+            { question: "Which manga features a world where everyone has superpowers called 'quirks'?", answer: ["my hero academia", "boku no hero academia"], points: 10 }
+        ]
+    },
+    tv: {
+        questions: [
+            { question: "What is the name of the coffee shop in Friends?", answer: ["central perk"], points: 10 },
+            { question: "Which TV series features a high school chemistry teacher turned drug lord?", answer: ["breaking bad"], points: 10 },
+            { question: "What is the name of the fictional continent in Game of Thrones?", answer: ["westeros"], points: 10 },
+            { question: "Which animated series features a talking baby and a diabolical dog?", answer: ["family guy"], points: 10 },
+            { question: "What is the name of the main character in The Office (US)?", answer: ["michael scott"], points: 10 }
+        ]
+    }
+};
 
-    // Generate unique ID
+// Database wrapper for in-memory storage (localStorage removed)
+const QuizDatabase = {
+    memoryStorage: {},
+
     generateId: () => Math.random().toString(36).substr(2, 9) + Date.now().toString(36),
 
-    // Save data
     save: (key, data) => {
         try {
-            if (QuizDatabase.isAvailable()) {
-                localStorage.setItem(`quizbattle_${key}`, JSON.stringify(data));
-            } else {
-                // Fallback to memory storage
-                QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
-                QuizDatabase.memoryStorage[key] = data;
-            }
+            QuizDatabase.memoryStorage[key] = JSON.parse(JSON.stringify(data));
             return true;
         } catch (error) {
             logError('Database save failed', { key, error: error.message });
@@ -34,31 +74,19 @@ const QuizDatabase = {
         }
     },
 
-    // Load data
     load: (key) => {
         try {
-            if (QuizDatabase.isAvailable()) {
-                const data = localStorage.getItem(`quizbattle_${key}`);
-                return data ? JSON.parse(data) : null;
-            } else {
-                QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
-                return QuizDatabase.memoryStorage[key] || null;
-            }
+            const data = QuizDatabase.memoryStorage[key];
+            return data ? JSON.parse(JSON.stringify(data)) : null;
         } catch (error) {
             logError('Database load failed', { key, error: error.message });
             return null;
         }
     },
 
-    // Delete data
     remove: (key) => {
         try {
-            if (QuizDatabase.isAvailable()) {
-                localStorage.removeItem(`quizbattle_${key}`);
-            } else {
-                QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
-                delete QuizDatabase.memoryStorage[key];
-            }
+            delete QuizDatabase.memoryStorage[key];
             return true;
         } catch (error) {
             logError('Database remove failed', { key, error: error.message });
@@ -66,40 +94,20 @@ const QuizDatabase = {
         }
     },
 
-    // Find all rooms
     findAllRooms: () => {
         try {
-            if (QuizDatabase.isAvailable()) {
-                const rooms = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('quizbattle_room_')) {
-                        const room = QuizDatabase.load(key.replace('quizbattle_', ''));
-                        if (room && room.expires > Date.now()) {
-                            rooms.push(room);
-                        } else if (room) {
-                            QuizDatabase.remove(key.replace('quizbattle_', ''));
-                        }
+            const rooms = [];
+            Object.keys(QuizDatabase.memoryStorage).forEach(key => {
+                if (key.startsWith('room_')) {
+                    const room = QuizDatabase.memoryStorage[key];
+                    if (room && room.expires > Date.now()) {
+                        rooms.push(room);
+                    } else if (room) {
+                        delete QuizDatabase.memoryStorage[key];
                     }
                 }
-                return rooms;
-            } else {
-                // Handle memory storage
-                const rooms = [];
-                if (QuizDatabase.memoryStorage) {
-                    Object.keys(QuizDatabase.memoryStorage).forEach(key => {
-                        if (key.startsWith('room_')) {
-                            const room = QuizDatabase.memoryStorage[key];
-                            if (room && room.expires > Date.now()) {
-                                rooms.push(room);
-                            } else if (room) {
-                                delete QuizDatabase.memoryStorage[key];
-                            }
-                        }
-                    });
-                }
-                return rooms;
-            }
+            });
+            return rooms;
         } catch (error) {
             logError('Find all rooms failed', { error: error.message });
             return [];
@@ -130,13 +138,11 @@ function logError(message, context = {}) {
         playerId: currentPlayer ? currentPlayer.id : null
     };
 
-    // Store error locally
     const errors = QuizDatabase.load('errors') || [];
     errors.push(error);
     if (errors.length > 50) errors.shift();
     QuizDatabase.save('errors', errors);
 
-    // Show error indicator
     const indicator = document.getElementById('errorIndicator');
     indicator.textContent = '⚠️ Error logged';
     indicator.classList.add('show');
@@ -145,20 +151,9 @@ function logError(message, context = {}) {
         alert(`Error: ${message}\nCheck console for details.`);
     };
 
-    // Send to remote service if available
-    if (window.ERROR_REPORTING_URL) {
-        fetch(window.ERROR_REPORTING_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(error),
-            keepalive: true
-        }).catch(() => {});
-    }
-
     console.error('Quiz Battle Error:', error);
 }
 
-// Window error handler
 window.addEventListener('error', (event) => {
     logError(event.message || 'Unhandled error', {
         filename: event.filename,
@@ -168,7 +163,6 @@ window.addEventListener('error', (event) => {
     });
 });
 
-// Unhandled promise rejection handler
 window.addEventListener('unhandledrejection', (event) => {
     logError('Unhandled promise rejection', {
         reason: event.reason
@@ -180,83 +174,28 @@ function generateRoomCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-// Load questions from JSON files with enhanced error handling
-async function loadQuestionsFromFiles(categories) {
+// Load questions from embedded data (no fetch needed)
+function loadQuestionsFromCategories(categories) {
     const allQuestions = [];
-    const loadErrors = [];
 
     for (const category of categories) {
-        try {
-            const filename = `${category}.json`;
-            const response = await fetch(filename);
-            
-            if (!response.ok) {
-                const errorMsg = `Failed to load ${filename} (HTTP ${response.status})`;
-                loadErrors.push(errorMsg);
-                logError(errorMsg, { category, status: response.status });
-                continue;
-            }
-
-            const data = await response.json();
-            
-            // Validate the data structure
-            if (!data.questions || !Array.isArray(data.questions)) {
-                const errorMsg = `Invalid format in ${filename}: missing 'questions' array`;
-                loadErrors.push(errorMsg);
-                logError(errorMsg, { category, dataKeys: Object.keys(data) });
-                continue;
-            }
-
-            if (data.questions.length === 0) {
-                const errorMsg = `${filename} contains no questions`;
-                loadErrors.push(errorMsg);
-                logError(errorMsg, { category });
-                continue;
-            }
-
-            // Add category info to each question
-            const questionsWithCategory = data.questions.map((q, index) => {
-                // Validate each question
-                if (!q.question || !q.answer || !Array.isArray(q.answer)) {
-                    logError(`Invalid question in ${filename} at index ${index}`, { question: q });
-                    return null;
-                }
-                return {
-                    ...q,
-                    category: category
-                };
-            }).filter(q => q !== null);
-
+        if (EMBEDDED_QUESTIONS[category]) {
+            const questionsWithCategory = EMBEDDED_QUESTIONS[category].questions.map(q => ({
+                ...q,
+                category: category
+            }));
             allQuestions.push(...questionsWithCategory);
-            console.log(`✅ Loaded ${questionsWithCategory.length} questions from ${filename}`);
-
-        } catch (fetchError) {
-            const errorMsg = `Error fetching ${category}.json: ${fetchError.message}`;
-            loadErrors.push(errorMsg);
-            logError(errorMsg, { category, error: fetchError.message });
+            console.log(`✅ Loaded ${questionsWithCategory.length} questions from ${category}`);
+        } else {
+            console.warn(`⚠️ Category ${category} not found`);
         }
     }
 
-    // If no questions loaded, show error and fallback
     if (allQuestions.length === 0) {
-        const errorSummary = loadErrors.join('\n• ');
-        alert(`❌ FAILED TO LOAD ALL QUESTION FILES!\n\nErrors:\n• ${errorSummary}\n\nThis usually means:\n1. JSON files are missing from the server\n2. Wrong file path\n3. Server permissions issue\n4. Running locally without a server (CORS)\n\nThe game will use fallback questions. Check browser console (F12) for details.`);
-        
-        logError('No questions loaded from any category', { 
-            categories, 
-            errors: loadErrors,
-            location: window.location.href 
-        });
-        
+        console.error('No questions loaded!');
         return createFallbackData();
     }
 
-    // If some files failed, show warning
-    if (loadErrors.length > 0) {
-        console.warn(`⚠️ Loaded ${allQuestions.length} questions but had ${loadErrors.length} errors:`, loadErrors);
-    }
-
-    // Shuffle questions
     const shuffled = allQuestions.sort(() => Math.random() - 0.5);
     
     return {
@@ -283,15 +222,12 @@ function fuzzyMatch(answer, correctAnswers) {
         for (let correctAnswer of correctAnswers) {
             const normalizedCorrect = correctAnswer.toLowerCase().trim().replace(/[^\w\s]/g, '');
             
-            // Exact match
             if (normalizedAnswer === normalizedCorrect) return 1;
             
-            // Contains match
             if (normalizedAnswer.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedAnswer)) {
                 return 0.9;
             }
             
-            // Word by word matching
             const answerWords = normalizedAnswer.split(/\s+/);
             const correctWords = normalizedCorrect.split(/\s+/);
             
@@ -305,7 +241,6 @@ function fuzzyMatch(answer, correctAnswers) {
             const wordMatchRatio = matchedWords / correctWords.length;
             if (wordMatchRatio >= 0.8) return 0.85;
             
-            // Levenshtein distance for typos
             const levenshteinRatio = calculateLevenshteinRatio(normalizedAnswer, normalizedCorrect);
             if (levenshteinRatio > 0.85) return levenshteinRatio;
         }
@@ -326,7 +261,6 @@ function calculateLevenshteinRatio(str1, str2) {
         if (len1 === 0) return len2 === 0 ? 1 : 0;
         if (len2 === 0) return 0;
 
-        // Initialize matrix
         for (let i = 0; i <= len2; i++) {
             matrix[i] = [i];
         }
@@ -334,7 +268,6 @@ function calculateLevenshteinRatio(str1, str2) {
             matrix[0][j] = j;
         }
 
-        // Fill matrix
         for (let i = 1; i <= len2; i++) {
             for (let j = 1; j <= len1; j++) {
                 if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
@@ -349,7 +282,6 @@ function calculateLevenshteinRatio(str1, str2) {
             }
         }
 
-        // Calculate similarity ratio
         const distance = matrix[len2][len1];
         const maxLength = Math.max(len1, len2);
         return 1 - (distance / maxLength);
@@ -404,11 +336,9 @@ function renderCategories() {
         selector.appendChild(btn);
     });
 
-    // Initialize selected categories array
     document.getElementById('createRoomForm').dataset.selectedCategories = JSON.stringify([]);
 }
 
-// Toggle category selection (multi-select)
 function toggleCategory(category) {
     const form = document.getElementById('createRoomForm');
     let selectedCategories = JSON.parse(form.dataset.selectedCategories || '[]');
@@ -416,11 +346,9 @@ function toggleCategory(category) {
     const btn = document.querySelector(`[data-category="${category}"]`);
     
     if (selectedCategories.includes(category)) {
-        // Remove category
         selectedCategories = selectedCategories.filter(c => c !== category);
         btn.classList.remove('selected');
     } else {
-        // Add category
         selectedCategories.push(category);
         btn.classList.add('selected');
     }
@@ -428,7 +356,7 @@ function toggleCategory(category) {
     form.dataset.selectedCategories = JSON.stringify(selectedCategories);
 }
 
-async function createRoom() {
+function createRoom() {
     try {
         const hostName = document.getElementById('hostName').value.trim();
         const selectedCategories = JSON.parse(document.getElementById('createRoomForm').dataset.selectedCategories || '[]');
@@ -444,19 +372,7 @@ async function createRoom() {
             return;
         }
 
-        // Show loading state
-        const createBtn = document.querySelector('#createRoomForm button[onclick="createRoom()"]');
-        const originalText = createBtn.textContent;
-        createBtn.textContent = 'Loading Questions...';
-        createBtn.disabled = true;
-
-        // Load questions from selected categories
-        const questionData = await loadQuestionsFromFiles(selectedCategories);
-        
-        // Check if we got fallback data
-        if (questionData.questions.length <= 3 && questionData.questions[0].question === "What is 2 + 2?") {
-            console.warn('Using fallback questions - check previous alerts for details');
-        }
+        const questionData = loadQuestionsFromCategories(selectedCategories);
 
         const room = {
             code: generateRoomCode(),
@@ -488,10 +404,6 @@ async function createRoom() {
         QuizDatabase.save(`room_${room.code}`, room);
         QuizDatabase.save(`player_${player.id}`, player);
 
-        // Restore button state
-        createBtn.textContent = originalText;
-        createBtn.disabled = false;
-
         showLobby();
         startHeartbeat();
 
@@ -502,15 +414,10 @@ async function createRoom() {
     } catch (error) {
         logError('Failed to create room', { error: error.message });
         alert(`Failed to create room: ${error.message}`);
-        
-        // Restore button state
-        const createBtn = document.querySelector('#createRoomForm button[onclick="createRoom()"]');
-        createBtn.textContent = 'Create Room';
-        createBtn.disabled = false;
     }
 }
 
-async function joinRoom() {
+function joinRoom() {
     try {
         const roomCode = document.getElementById('joinRoomCode').value.trim().toUpperCase();
         const playerName = document.getElementById('playerName').value.trim();
@@ -570,50 +477,40 @@ async function joinRoom() {
 }
 
 function startHeartbeat() {
-    // Clear any existing heartbeat
     if (heartbeatInterval) {
         clearInterval(heartbeatInterval);
     }
 
-    // Send heartbeat every 2 seconds
     heartbeatInterval = setInterval(() => {
         try {
             if (currentRoom && currentPlayer) {
-                // Update player's last seen timestamp
                 currentPlayer.lastSeen = Date.now();
                 QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
 
-                // Refresh room data
                 const freshRoom = QuizDatabase.load(`room_${currentRoom.code}`);
                 if (freshRoom) {
-                    // Remove disconnected players (no heartbeat for 10 seconds)
                     freshRoom.players = freshRoom.players.filter(p => {
                         const playerData = QuizDatabase.load(`player_${p.id}`);
                         return playerData && (Date.now() - playerData.lastSeen < 10000);
                     });
 
-                    // Update current room
                     currentRoom = freshRoom;
                     QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
 
-                    // Check if still in room
                     const stillInRoom = currentRoom.players.some(p => p.id === currentPlayer.id);
                     if (!stillInRoom) {
-                        // Kicked out or disconnected
                         clearInterval(heartbeatInterval);
                         alert('You have been disconnected from the room.');
                         backToHome();
                         return;
                     }
 
-                    // Update displays based on current screen
                     if (document.getElementById('lobbyScreen').classList.contains('active')) {
                         updateLobbyDisplay();
                     } else if (document.getElementById('gameScreen').classList.contains('active')) {
                         updateGameDisplay();
                     }
                 } else {
-                    // Room no longer exists
                     clearInterval(heartbeatInterval);
                     alert('Room no longer exists.');
                     backToHome();
@@ -637,7 +534,6 @@ function updateLobbyDisplay() {
         document.getElementById('lobbyRoomCode').textContent = currentRoom.code;
         document.getElementById('playerCount').textContent = currentRoom.players.length;
         
-        // Display selected categories
         const categoriesSpan = document.getElementById('lobbyCategories');
         if (currentRoom.categories && currentRoom.categories.length > 0) {
             categoriesSpan.textContent = currentRoom.categories.join(', ').toUpperCase();
@@ -648,7 +544,6 @@ function updateLobbyDisplay() {
         const playerList = document.getElementById('lobbyPlayerList');
         playerList.innerHTML = '';
         
-        // Sort players: host first, then by score
         const sortedPlayers = [...currentRoom.players].sort((a, b) => {
             if (a.isHost && !b.isHost) return -1;
             if (!a.isHost && b.isHost) return 1;
@@ -665,7 +560,6 @@ function updateLobbyDisplay() {
             playerList.appendChild(tag);
         });
 
-        // Show/hide controls based on host status
         if (isHost) {
             document.getElementById('hostControlsLobby').classList.remove('hidden');
             document.getElementById('playerWaitingMessage').classList.add('hidden');
@@ -692,7 +586,6 @@ function startGame() {
         currentRoom.currentRound = 0;
         currentRoom.started = Date.now();
         
-        // Initialize all players
         currentRoom.players.forEach(player => {
             player.score = 0;
             player.answers = [];
@@ -715,13 +608,11 @@ function nextRound() {
     try {
         if (!currentRoom || !currentPlayer) return;
 
-        // Clear any existing interval
         if (gameInterval) {
             clearInterval(gameInterval);
             gameInterval = null;
         }
 
-        // Reset state
         hasAnswered = false;
         document.getElementById('answerInput').value = '';
         document.getElementById('answerInput').disabled = false;
@@ -729,17 +620,14 @@ function nextRound() {
         document.getElementById('answersReveal').classList.add('hidden');
         document.getElementById('hostNextControls').classList.add('hidden');
 
-        // Check if game should end
         if (currentRoom.currentRound >= 10 || currentRoom.currentRound >= currentRoom.questions.length) {
             endGame();
             return;
         }
 
-        // Increment round
         currentRoom.currentRound++;
         QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
 
-        // Get random question that hasn't been used
         const availableQuestions = currentRoom.questions.filter((q, index) => 
             !currentRoom.players.some(p => 
                 p.answers.some(a => a.questionIndex === index)
@@ -752,19 +640,15 @@ function nextRound() {
         }
 
         currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
-        const questionIndex = currentRoom.questions.indexOf(currentQuestion);
 
-        // Update UI
         document.getElementById('currentRound').textContent = currentRoom.currentRound;
         document.getElementById('questionText').textContent = currentQuestion.question;
         
-        // Reset player states
         currentRoom.players.forEach(player => {
             player.hasAnswered = false;
             player.currentAnswer = null;
         });
 
-        // Start timer
         timeLeft = currentRoom.timerDuration;
         updateTimerDisplay();
         
@@ -803,7 +687,6 @@ function updateTimerDisplay() {
 
 function timeUp() {
     try {
-        // Auto-submit empty answers for players who didn't answer
         currentRoom.players.forEach(player => {
             if (!player.hasAnswered) {
                 const answerIndex = currentRoom.questions.indexOf(currentQuestion);
@@ -837,21 +720,17 @@ function submitAnswer() {
             return;
         }
 
-        // Disable further input
         hasAnswered = true;
         answerInput.disabled = true;
         document.getElementById('submitBtn').disabled = true;
 
-        // Calculate fuzzy match score
         const matchScore = fuzzyMatch(answer, currentQuestion.answer);
         const isCorrect = matchScore >= 0.8;
         const points = isCorrect ? currentQuestion.points : 0;
 
-        // Add bonus points for quick answers
         const timeBonus = Math.floor((timeLeft / currentRoom.timerDuration) * 5);
         const totalPoints = points + (isCorrect ? timeBonus : 0);
 
-        // Store answer
         const questionIndex = currentRoom.questions.indexOf(currentQuestion);
         currentPlayer.answers.push({
             questionIndex: questionIndex,
@@ -862,7 +741,6 @@ function submitAnswer() {
             timestamp: Date.now()
         });
 
-        // Update score immediately
         if (isCorrect) {
             currentPlayer.score += totalPoints;
         }
@@ -870,17 +748,14 @@ function submitAnswer() {
         currentPlayer.hasAnswered = true;
         QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
 
-        // Update room data
         const playerIndex = currentRoom.players.findIndex(p => p.id === currentPlayer.id);
         if (playerIndex !== -1) {
             currentRoom.players[playerIndex] = currentPlayer;
             QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
         }
 
-        // Show visual feedback
         showVisualFeedback(isCorrect ? '✓' : '✗', isCorrect ? 'feedback-correct' : 'feedback-wrong');
 
-        // Check if all players have answered
         if (currentRoom.players.every(p => p.hasAnswered)) {
             clearInterval(gameInterval);
             setTimeout(showAnswers, 1000);
@@ -891,7 +766,6 @@ function submitAnswer() {
     } catch (error) {
         logError('Answer submission failed', { error: error.message });
         alert('Failed to submit answer. Please try again.');
-        // Re-enable input on error
         hasAnswered = false;
         document.getElementById('answerInput').disabled = false;
         document.getElementById('submitBtn').disabled = false;
@@ -907,7 +781,6 @@ function showAnswers() {
         answersReveal.classList.remove('hidden');
         answersList.innerHTML = '';
 
-        // Display correct answer
         if (currentQuestion && currentQuestion.answer && currentQuestion.answer.length > 0) {
             correctAnswerDisplay.innerHTML = `<strong>Correct Answer:</strong> ${currentQuestion.answer.join(' OR ')}`;
             correctAnswerDisplay.classList.remove('hidden');
@@ -915,7 +788,6 @@ function showAnswers() {
             correctAnswerDisplay.classList.add('hidden');
         }
 
-        // Sort players by score (descending)
         const sortedPlayers = [...currentRoom.players].sort((a, b) => b.score - a.score);
 
         sortedPlayers.forEach(player => {
@@ -926,7 +798,6 @@ function showAnswers() {
             answerItem.className = 'answer-item';
             
             const isCorrect = answer.isCorrect;
-            const verdictClass = isCorrect ? 'verdict-correct' : 'verdict-wrong';
             const verdictText = isCorrect ? '✓' : '✗';
             
             answerItem.innerHTML = `
@@ -938,7 +809,6 @@ function showAnswers() {
                 </div>
             `;
 
-            // Add host controls for manual override
             if (isHost && !answer.isCorrect) {
                 const correctBtn = document.createElement('button');
                 correctBtn.className = 'verdict-btn verdict-correct';
@@ -962,11 +832,9 @@ function showAnswers() {
             answersList.appendChild(answerItem);
         });
 
-        // Update host controls
         if (isHost) {
             document.getElementById('hostNextControls').classList.remove('hidden');
             
-            // Auto-next if enabled
             if (autoNextEnabled) {
                 setTimeout(() => {
                     if (autoNextEnabled) {
@@ -976,7 +844,6 @@ function showAnswers() {
             }
         }
 
-        // Update final game display
         updateGameDisplay();
 
     } catch (error) {
@@ -992,12 +859,10 @@ function overrideAnswer(playerId, markAsCorrect) {
         const answer = player.answers.find(a => a.questionIndex === currentRoom.questions.indexOf(currentQuestion));
         if (!answer) return;
 
-        // Revert previous score
         if (answer.isCorrect) {
             player.score -= answer.points;
         }
 
-        // Apply new verdict
         answer.isCorrect = markAsCorrect;
         if (markAsCorrect) {
             answer.points = currentQuestion.points;
@@ -1006,15 +871,12 @@ function overrideAnswer(playerId, markAsCorrect) {
             answer.points = 0;
         }
 
-        // Update database
         QuizDatabase.save(`player_${player.id}`, player);
         QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
 
-        // Refresh display
         showAnswers();
         updateGameDisplay();
 
-        // Visual feedback
         showVisualFeedback(markAsCorrect ? 'Updated to ✓' : 'Confirmed ✗', 'feedback-correct');
 
     } catch (error) {
@@ -1027,10 +889,8 @@ function updateGameDisplay() {
     if (!currentRoom || !document.getElementById('gameScreen').classList.contains('active')) return;
 
     try {
-        // Update room code
         document.getElementById('gameRoomCode').textContent = currentRoom.code;
 
-        // Update scoreboard
         const scoreboardContent = document.getElementById('scoreboardContent');
         scoreboardContent.innerHTML = '';
 
@@ -1048,7 +908,6 @@ function updateGameDisplay() {
                 <span class="score-points">${player.score} pts</span>
             `;
             
-            // Highlight current player
             if (player.id === currentPlayer.id) {
                 scoreItem.style.background = 'linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(13, 148, 136, 0.2))';
                 scoreItem.style.borderRadius = '8px';
@@ -1058,7 +917,6 @@ function updateGameDisplay() {
             scoreboardContent.appendChild(scoreItem);
         });
 
-        // Update players grid
         const playersGrid = document.getElementById('playersGrid');
         playersGrid.innerHTML = '';
 
@@ -1066,7 +924,6 @@ function updateGameDisplay() {
             const playerCard = document.createElement('div');
             playerCard.className = 'player-card';
             
-            // Determine status
             let status = 'waiting';
             let statusText = 'Waiting...';
             
@@ -1093,7 +950,6 @@ function updateGameDisplay() {
             playersGrid.appendChild(playerCard);
         });
 
-        // Show/hide host controls
         if (isHost) {
             document.getElementById('hostControls').classList.remove('hidden');
             document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
@@ -1115,7 +971,6 @@ function toggleAutoNext() {
     
     document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
     
-    // If enabled and answers are showing, start countdown
     if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
         setTimeout(() => {
             if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
@@ -1150,17 +1005,14 @@ function endGame() {
             heartbeatInterval = null;
         }
 
-        // Update final scores
         if (currentRoom) {
             currentRoom.isActive = false;
             QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
         }
 
-        // Show game over screen
         hideAllScreens();
         document.getElementById('gameOverScreen').classList.add('active');
 
-        // Display final scores
         const finalScores = document.getElementById('finalScores');
         finalScores.innerHTML = '';
 
@@ -1179,7 +1031,6 @@ function endGame() {
             finalScores.appendChild(scoreItem);
         });
 
-        // Clean up old rooms after 1 hour
         setTimeout(() => {
             if (currentRoom && currentRoom.code) {
                 QuizDatabase.remove(`room_${currentRoom.code}`);
@@ -1192,10 +1043,8 @@ function endGame() {
 }
 
 function playAgain() {
-    // Reset state
     if (currentRoom && currentPlayer) {
         if (isHost) {
-            // Host can restart the same room
             currentRoom.isActive = false;
             currentRoom.currentRound = 0;
             currentRoom.players.forEach(player => {
@@ -1208,7 +1057,6 @@ function playAgain() {
             document.getElementById('lobbyScreen').classList.add('active');
             updateLobbyDisplay();
         } else {
-            // Player joins a new game
             backToHome();
         }
     } else {
@@ -1218,7 +1066,6 @@ function playAgain() {
 
 function startSoloGame() {
     try {
-        // Create a solo room
         const roomCode = 'SOLO_' + generateRoomCode();
         const player = {
             id: QuizDatabase.generateId(),
@@ -1229,11 +1076,13 @@ function startSoloGame() {
             lastSeen: Date.now()
         };
 
+        const questionData = loadQuestionsFromCategories(['knowledge']);
+
         const room = {
             code: roomCode,
             categories: ['knowledge'],
             timerDuration: 30,
-            questions: [],
+            questions: questionData.questions,
             players: [player],
             currentRound: 0,
             isActive: false,
@@ -1243,23 +1092,17 @@ function startSoloGame() {
             isSolo: true
         };
 
-        // Load questions for solo game
-        loadQuestionsFromFiles(['knowledge']).then(questionData => {
-            room.questions = questionData.questions;
-            
-            currentRoom = room;
-            currentPlayer = player;
-            isHost = true;
+        currentRoom = room;
+        currentPlayer = player;
+        isHost = true;
 
-            QuizDatabase.save(`room_${room.code}`, room);
-            QuizDatabase.save(`player_${player.id}`, player);
+        QuizDatabase.save(`room_${room.code}`, room);
+        QuizDatabase.save(`player_${player.id}`, player);
 
-            // Start game immediately
-            hideAllScreens();
-            document.getElementById('gameScreen').classList.add('active');
-            startHeartbeat();
-            nextRound();
-        });
+        hideAllScreens();
+        document.getElementById('gameScreen').classList.add('active');
+        startHeartbeat();
+        nextRound();
 
     } catch (error) {
         logError('Failed to start solo game', { error: error.message });
@@ -1268,7 +1111,6 @@ function startSoloGame() {
 }
 
 function backToHome() {
-    // Clean up
     if (gameInterval) {
         clearInterval(gameInterval);
         gameInterval = null;
@@ -1279,7 +1121,6 @@ function backToHome() {
         heartbeatInterval = null;
     }
 
-    // Reset state
     currentRoom = null;
     currentPlayer = null;
     isHost = false;
@@ -1292,7 +1133,6 @@ function backToHome() {
     hideCreateRoom();
     hideJoinRoom();
 
-    // Clear forms
     document.getElementById('hostName').value = '';
     document.getElementById('joinRoomCode').value = '';
     document.getElementById('playerName').value = '';
@@ -1306,19 +1146,16 @@ function hideAllScreens() {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Enter to submit answer
     if (e.key === 'Enter' && document.getElementById('answerInput') === document.activeElement && !hasAnswered) {
         e.preventDefault();
         submitAnswer();
     }
 
-    // Space to start game (host in lobby)
     if (e.key === ' ' && isHost && document.getElementById('lobbyScreen').classList.contains('active')) {
         e.preventDefault();
         startGame();
     }
 
-    // Escape to go back
     if (e.key === 'Escape' && !document.getElementById('homeScreen').classList.contains('active')) {
         e.preventDefault();
         if (confirm('Are you sure you want to leave? Your progress will be lost.')) {
@@ -1341,7 +1178,6 @@ document.getElementById('playerName').addEventListener('input', (e) => {
 });
 
 document.getElementById('answerInput').addEventListener('input', (e) => {
-    // Show fuzzy match score in real-time
     if (currentQuestion && !hasAnswered) {
         const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
         if (matchScore > 0.7) {
@@ -1354,10 +1190,8 @@ document.getElementById('answerInput').addEventListener('input', (e) => {
     }
 });
 
-// Auto-cleanup on page unload
 window.addEventListener('beforeunload', () => {
     if (currentRoom && currentRoom.code && !currentRoom.isSolo) {
-        // Mark player as disconnected
         if (currentPlayer) {
             currentPlayer.lastSeen = Date.now() - 30000;
             QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
@@ -1365,7 +1199,6 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
-// Periodically clean up expired rooms (every 10 minutes)
 setInterval(() => {
     try {
         const rooms = QuizDatabase.findAllRooms();
@@ -1387,30 +1220,25 @@ setInterval(() => {
     }
 }, 10 * 60 * 1000);
 
-// Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        // Clean up any expired rooms on startup
         const rooms = QuizDatabase.findAllRooms();
         console.log(`Found ${rooms.length} active rooms`);
         
-        // Check for any errors in storage
         const errors = QuizDatabase.load('errors') || [];
         if (errors.length > 0) {
             console.log(`Found ${errors.length} stored errors`);
         }
 
-        // Add version info
-        const version = '2.0.1';
+        const version = '2.1.0-local';
         document.documentElement.dataset.version = version;
         
-        console.log('Quiz Battle initialized successfully');
+        console.log('Quiz Battle initialized successfully (Local Mode - No Server Required)');
     } catch (error) {
         logError('App initialization failed', { error: error.message });
     }
 });
 
-// Expose functions globally for debugging
 window.QuizBattle = {
     createRoom,
     joinRoom,
