@@ -361,6 +361,7 @@ function createRoom() {
         const hostName = document.getElementById('hostName').value.trim();
         const selectedCategories = JSON.parse(document.getElementById('createRoomForm').dataset.selectedCategories || '[]');
         const timerDuration = parseInt(document.getElementById('timerSelect').value);
+        const questionCount = parseInt(document.getElementById('questionCountSelect').value);
 
         if (!hostName) {
             alert('Please enter your name');
@@ -378,14 +379,15 @@ function createRoom() {
             code: generateRoomCode(),
             categories: selectedCategories,
             timerDuration: timerDuration,
-            questions: questionData.questions,
+            questionCount: questionCount,
+            questions: questionData.questions.slice(0, questionCount),
             players: [],
             currentRound: 0,
             isActive: false,
             expires: Date.now() + (6 * 60 * 60 * 1000),
             created: Date.now(),
             autoNext: false,
-            usedQuestions: [] // NEW: Track used questions to prevent repetition
+            usedQuestions: []
         };
 
         const player = {
@@ -394,7 +396,9 @@ function createRoom() {
             score: 0,
             isHost: true,
             answers: [],
-            lastSeen: Date.now()
+            lastSeen: Date.now(),
+            usedPoints: [],
+            selectedPoint: null
         };
 
         room.players.push(player);
@@ -456,7 +460,9 @@ function joinRoom() {
             score: 0,
             isHost: false,
             answers: [],
-            lastSeen: Date.now()
+            lastSeen: Date.now(),
+            usedPoints: [],
+            selectedPoint: null
         };
 
         room.players.push(player);
@@ -586,12 +592,14 @@ function startGame() {
         currentRoom.isActive = true;
         currentRoom.currentRound = 0;
         currentRoom.started = Date.now();
-        currentRoom.usedQuestions = []; // NEW: Reset used questions when game starts
+        currentRoom.usedQuestions = [];
         
         currentRoom.players.forEach(player => {
             player.score = 0;
             player.answers = [];
             player.hasAnswered = false;
+            player.usedPoints = [];
+            player.selectedPoint = null;
         });
 
         QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
@@ -622,7 +630,7 @@ function nextRound() {
         document.getElementById('answersReveal').classList.add('hidden');
         document.getElementById('hostNextControls').classList.add('hidden');
 
-        if (currentRoom.currentRound >= 10 || currentRoom.currentRound >= currentRoom.questions.length) {
+        if (currentRoom.currentRound >= currentRoom.questionCount || currentRoom.currentRound >= currentRoom.questions.length) {
             endGame();
             return;
         }
@@ -630,7 +638,7 @@ function nextRound() {
         currentRoom.currentRound++;
         QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
 
-        // NEW: Filter out questions that have already been used
+        // Filter out questions that have already been used
         const availableQuestions = currentRoom.questions.filter((q, index) => 
             !currentRoom.usedQuestions.includes(index) &&
             !currentRoom.players.some(p => 
@@ -646,19 +654,24 @@ function nextRound() {
         currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
         const questionIndex = currentRoom.questions.indexOf(currentQuestion);
         
-        // NEW: Mark this question as used so it won't appear again
+        // Mark this question as used so it won't appear again
         if (!currentRoom.usedQuestions.includes(questionIndex)) {
             currentRoom.usedQuestions.push(questionIndex);
             QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
         }
 
         document.getElementById('currentRound').textContent = currentRoom.currentRound;
+        document.getElementById('totalRounds').textContent = currentRoom.questionCount;
         document.getElementById('questionText').textContent = currentQuestion.question;
         
         currentRoom.players.forEach(player => {
             player.hasAnswered = false;
             player.currentAnswer = null;
+            player.selectedPoint = null;
         });
+
+        // Reset and show points selection
+        renderPointsGrid();
 
         timeLeft = currentRoom.timerDuration;
         updateTimerDisplay();
@@ -682,6 +695,50 @@ function nextRound() {
     }
 }
 
+function renderPointsGrid() {
+    const pointsGrid = document.getElementById('pointsGrid');
+    pointsGrid.innerHTML = '';
+    
+    const totalPoints = currentRoom.questionCount;
+    
+    for (let i = 1; i <= totalPoints; i++) {
+        const btn = document.createElement('div');
+        btn.className = 'point-btn';
+        btn.textContent = i;
+        btn.dataset.value = i;
+        
+        if (currentPlayer.usedPoints.includes(i)) {
+            btn.classList.add('used');
+        } else if (currentPlayer.selectedPoint === i) {
+            btn.classList.add('selected');
+        }
+        
+        if (!btn.classList.contains('used')) {
+            btn.onclick = () => selectPoint(i);
+        }
+        
+        pointsGrid.appendChild(btn);
+    }
+}
+
+function selectPoint(value) {
+    if (hasAnswered || currentPlayer.usedPoints.includes(value)) return;
+    
+    currentPlayer.selectedPoint = value;
+    QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
+    
+    renderPointsGrid();
+}
+
+function getLowestAvailablePoint() {
+    for (let i = 1; i <= currentRoom.questionCount; i++) {
+        if (!currentPlayer.usedPoints.includes(i)) {
+            return i;
+        }
+    }
+    return 1; // Fallback
+}
+
 function updateTimerDisplay() {
     const timerDisplay = document.getElementById('timerDisplay');
     const timerProgress = document.getElementById('timerProgress');
@@ -698,21 +755,31 @@ function updateTimerDisplay() {
 
 function timeUp() {
     try {
-        currentRoom.players.forEach(player => {
-            if (!player.hasAnswered) {
-                const answerIndex = currentRoom.questions.indexOf(currentQuestion);
-                player.answers.push({
-                    questionIndex: answerIndex,
-                    answer: '',
-                    isCorrect: false,
-                    points: 0,
-                    timestamp: Date.now()
-                });
-                player.hasAnswered = true;
-            }
+        if (!currentPlayer.selectedPoint) {
+            currentPlayer.selectedPoint = getLowestAvailablePoint();
+        }
+        
+        currentPlayer.usedPoints.push(currentPlayer.selectedPoint);
+        
+        const questionIndex = currentRoom.questions.indexOf(currentQuestion);
+        currentPlayer.answers.push({
+            questionIndex: questionIndex,
+            answer: '',
+            isCorrect: false,
+            points: 0,
+            timestamp: Date.now(),
+            selectedPoint: currentPlayer.selectedPoint
         });
+        
+        currentPlayer.hasAnswered = true;
+        QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
 
-        QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+        const playerIndex = currentRoom.players.findIndex(p => p.id === currentPlayer.id);
+        if (playerIndex !== -1) {
+            currentRoom.players[playerIndex] = currentPlayer;
+            QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+        }
+
         showAnswers();
     } catch (error) {
         logError('Time up handling failed', { error: error.message });
@@ -731,16 +798,25 @@ function submitAnswer() {
             return;
         }
 
+        // Auto-select lowest point if none selected
+        if (!currentPlayer.selectedPoint) {
+            currentPlayer.selectedPoint = getLowestAvailablePoint();
+        }
+
         hasAnswered = true;
         answerInput.disabled = true;
         document.getElementById('submitBtn').disabled = true;
 
         const matchScore = fuzzyMatch(answer, currentQuestion.answer);
         const isCorrect = matchScore >= 0.8;
-        const points = isCorrect ? currentQuestion.points : 0;
-
+        
+        // Use selected point value instead of fixed question points
+        const basePoints = currentPlayer.selectedPoint;
         const timeBonus = Math.floor((timeLeft / currentRoom.timerDuration) * 5);
-        const totalPoints = points + (isCorrect ? timeBonus : 0);
+        const totalPoints = isCorrect ? basePoints + timeBonus : 0;
+
+        // Mark point as used
+        currentPlayer.usedPoints.push(currentPlayer.selectedPoint);
 
         const questionIndex = currentRoom.questions.indexOf(currentQuestion);
         currentPlayer.answers.push({
@@ -749,7 +825,8 @@ function submitAnswer() {
             isCorrect: isCorrect,
             points: totalPoints,
             matchScore: matchScore,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            selectedPoint: currentPlayer.selectedPoint
         });
 
         if (isCorrect) {
@@ -810,10 +887,12 @@ function showAnswers() {
             
             const isCorrect = answer.isCorrect;
             const verdictText = isCorrect ? '✓' : '✗';
+            const pointValue = answer.selectedPoint || 0;
             
             answerItem.innerHTML = `
                 <div class="answer-player">${player.name}</div>
                 <div class="answer-text">${answer.answer || '(No answer)'}</div>
+                <div class="answer-point-value">Point: ${pointValue}</div>
                 <div class="answer-verdict">
                     <span style="font-size: 1.5em; font-weight: bold; ${isCorrect ? 'color: #27ae60' : 'color: #e74c3c'}">${verdictText}</span>
                     <span style="font-weight: bold; color: #f39c12;">${answer.points} pts</span>
@@ -876,7 +955,9 @@ function overrideAnswer(playerId, markAsCorrect) {
 
         answer.isCorrect = markAsCorrect;
         if (markAsCorrect) {
-            answer.points = currentQuestion.points;
+            const basePoints = answer.selectedPoint || 1;
+            const timeBonus = Math.floor((answer.timeLeft || 0) / currentRoom.timerDuration * 5);
+            answer.points = basePoints + timeBonus;
             player.score += answer.points;
         } else {
             answer.points = 0;
@@ -900,7 +981,8 @@ function updateGameDisplay() {
     if (!currentRoom || !document.getElementById('gameScreen').classList.contains('active')) return;
 
     try {
-        document.getElementById('gameRoomCode').textContent = currentRoom.code;
+        // REMOVED: Room code display
+        // document.getElementById('gameRoomCode').textContent = currentRoom.code;
 
         const scoreboardContent = document.getElementById('scoreboardContent');
         scoreboardContent.innerHTML = '';
@@ -928,38 +1010,9 @@ function updateGameDisplay() {
             scoreboardContent.appendChild(scoreItem);
         });
 
-        const playersGrid = document.getElementById('playersGrid');
-        playersGrid.innerHTML = '';
-
-        sortedPlayers.forEach(player => {
-            const playerCard = document.createElement('div');
-            playerCard.className = 'player-card';
-            
-            let status = 'waiting';
-            let statusText = 'Waiting...';
-            
-            if (player.hasAnswered) {
-                status = 'answered';
-                statusText = 'Answered';
-            } else if (player.id === currentPlayer.id && !hasAnswered) {
-                status = 'active';
-                statusText = 'Your turn!';
-            }
-
-            if (player.id === currentPlayer.id) {
-                playerCard.classList.add('active');
-            }
-
-            playerCard.classList.add(status);
-            
-            playerCard.innerHTML = `
-                <div class="player-name">${player.name}</div>
-                <div class="player-score">${player.score}</div>
-                <div class="player-status status-${status}">${statusText}</div>
-            `;
-            
-            playersGrid.appendChild(playerCard);
-        });
+        // REMOVED: Players grid rendering
+        // const playersGrid = document.getElementById('playersGrid');
+        // playersGrid.innerHTML = '';
 
         if (isHost) {
             document.getElementById('hostControls').classList.remove('hidden');
@@ -1058,10 +1111,12 @@ function playAgain() {
         if (isHost) {
             currentRoom.isActive = false;
             currentRoom.currentRound = 0;
-            currentRoom.usedQuestions = []; // NEW: Reset used questions when playing again
+            currentRoom.usedQuestions = [];
             currentRoom.players.forEach(player => {
                 player.score = 0;
                 player.answers = [];
+                player.usedPoints = [];
+                player.selectedPoint = null;
             });
             QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
             
@@ -1085,7 +1140,9 @@ function startSoloGame() {
             score: 0,
             isHost: true,
             answers: [],
-            lastSeen: Date.now()
+            lastSeen: Date.now(),
+            usedPoints: [],
+            selectedPoint: null
         };
 
         const questionData = loadQuestionsFromCategories(['knowledge']);
@@ -1094,7 +1151,8 @@ function startSoloGame() {
             code: roomCode,
             categories: ['knowledge'],
             timerDuration: 30,
-            questions: questionData.questions,
+            questionCount: 10,
+            questions: questionData.questions.slice(0, 10),
             players: [player],
             currentRound: 0,
             isActive: false,
@@ -1102,7 +1160,7 @@ function startSoloGame() {
             created: Date.now(),
             autoNext: false,
             isSolo: true,
-            usedQuestions: [] // NEW: Track used questions for solo mode too
+            usedQuestions: []
         };
 
         currentRoom = room;
@@ -1243,7 +1301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Found ${errors.length} stored errors`);
         }
 
-        const version = '2.1.0-local';
+        const version = '2.2.0-local';
         document.documentElement.dataset.version = version;
         
         console.log('Quiz Battle initialized successfully (Local Mode - No Server Required)');
