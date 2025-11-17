@@ -1,9 +1,0 @@
-{
-  "questions": [
-    { "question": "Who is the creator of One Piece?", "answer": ["eiichiro oda", "oda"], "points": 10 },
-    { "question": "What is the name of the training manga about a weak boy becoming a hero?", "answer": ["one punch man", "one-punch man"], "points": 10 },
-    { "question": "Which manga features alchemy as its main power system?", "answer": ["fullmetal alchemist", "full metal alchemist"], "points": 10 },
-    { "question": "What is the name of Guts' massive sword in Berserk?", "answer": ["dragonslayer", "dragon slayer"], "points": 10 },
-    { "question": "Which manga features a world where everyone has superpowers called 'quirks'?", "answer": ["my hero academia", "boku no hero academia"], "points": 10 }
-  ]
-}

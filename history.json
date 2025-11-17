@@ -1,9 +1,0 @@
-{
-  "questions": [
-    { "question": "Who was the first President of the United States?", "answer": ["george washington", "washington"], "points": 10 },
-    { "question": "In which year did Christopher Columbus reach the Americas?", "answer": ["1492"], "points": 10 },
-    { "question": "Which ancient wonder of the world still stands today?", "answer": ["great pyramid of giza", "pyramids of giza", "great pyramid"], "points": 10 },
-    { "question": "Who wrote the Declaration of Independence?", "answer": ["thomas jefferson", "jefferson"], "points": 10 },
-    { "question": "Which empire built Machu Picchu?", "answer": ["inca", "incan", "inca empire"], "points": 10 }
-  ]
-}
