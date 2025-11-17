@@ -31,6 +31,17 @@
                         <input type="text" id="hostName" placeholder="Your name" maxlength="20">
                     </div>
                     <div class="input-group">
+                        <label style="color: var(--text-secondary); font-size: 12px; margin-bottom: 8px;">Number of Questions</label>
+                        <select id="questionCountSelect">
+                            <option value="5">5 questions</option>
+                            <option value="10" selected>10 questions</option>
+                            <option value="15">15 questions</option>
+                            <option value="20">20 questions</option>
+                            <option value="25">25 questions</option>
+                            <option value="30">30 questions</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
                         <select id="timerSelect">
                             <option value="20">20 seconds</option>
                             <option value="30" selected>30 seconds</option>
@@ -68,6 +79,9 @@
                 <p style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">
                     Categories: <span id="lobbyCategories" style="color: var(--text-secondary);"></span>
                 </p>
+                <p style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">
+                    Questions: <span id="lobbyQuestionCount" style="color: var(--text-secondary);"></span>
+                </p>
                 <div class="player-list" id="lobbyPlayerList"></div>
             </div>
             
@@ -86,8 +100,7 @@
             <div class="game-layout">
                 <div class="main-game-area">
                     <div class="game-header">
-                        <div class="room-code" id="gameRoomCode"></div>
-                        <div class="round-info">Round <span id="currentRound">1</span></div>
+                        <div class="round-info">Round <span id="currentRound">1</span> / <span id="totalRounds">10</span></div>
                     </div>
 
                     <div class="timer-container">
@@ -99,6 +112,12 @@
 
                     <div class="question-container">
                         <div class="question" id="questionText">Loading question...</div>
+                    </div>
+
+                    <!-- Points Selection Panel -->
+                    <div class="points-selection" id="pointsSelection">
+                        <h3>Select Points for This Question</h3>
+                        <div class="points-grid" id="pointsGrid"></div>
                     </div>
 
                     <div class="answer-section" id="answerSection">
@@ -123,8 +142,6 @@
                         <div class="scoreboard-title">Scoreboard</div>
                         <div id="scoreboardContent"></div>
                     </div>
-
-                    <div class="players-grid" id="playersGrid"></div>
 
                     <div class="host-controls hidden" id="hostControls">
                         <h3>Host Controls</h3>
