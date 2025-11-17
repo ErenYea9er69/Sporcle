@@ -1075,3 +1075,75 @@ input::placeholder {
         grid-template-columns: repeat(5, 1fr);
     }
 }
+
+/* POINTS GRID STYLES */
+.points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    max-width: 600px;
+    margin: 20px auto 0;
+}
+
+.point-btn {
+    padding: 15px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.point-btn:hover:not(.used):not(.selected) {
+    background: var(--bg-tertiary);
+    border-color: var(--border-medium);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+}
+
+.point-btn.selected {
+    background: var(--quiz-primary);
+    border-color: var(--border-accent);
+    box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.point-btn.used {
+    background: var(--bg-tertiary);
+    opacity: 0.3;
+    cursor: not-allowed;
+    text-decoration: line-through;
+    transform: none;
+}
+
+.point-btn.used::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--text-muted);
+    transform: translateY(-50%);
+}
+
+/* Ensure points selection is visible */
+.points-selection {
+    margin-bottom: 24px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+}
+
+.points-selection h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}

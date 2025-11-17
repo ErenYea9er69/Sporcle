@@ -100,6 +100,7 @@
             <div class="game-layout">
                 <div class="main-game-area">
                     <div class="game-header">
+                        <div id="gameRoomCode" style="display: none;"></div> <!-- Hidden room code -->
                         <div class="round-info">Round <span id="currentRound">1</span> / <span id="totalRounds">10</span></div>
                     </div>
 
@@ -118,6 +119,7 @@
                     <div class="points-selection" id="pointsSelection">
                         <h3>Select Points for This Question</h3>
                         <div class="points-grid" id="pointsGrid"></div>
+                        <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">Choose a unique value for each question. Lowest available will be auto-selected if time runs out.</p>
                     </div>
 
                     <div class="answer-section" id="answerSection">
@@ -153,6 +155,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden players grid (removed from display) -->
+            <div id="playersGrid" class="hidden"></div>
         </div>
 
         <!-- Game Over Screen -->
