@@ -183,79 +183,60 @@ function generateRoomCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-// Question loading with error handling
-async function loadQuestions(category) {
+// NEW: Load questions from JSON files
+async function loadQuestionsFromFiles(categories) {
     try {
-        // In a real implementation, these would be separate JSON files
-        // For demo purposes, we'll use inline data with a loading simulation
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+        const allQuestions = [];
         
-        const questionSets = {
-            anime: {
-                questions: [
-                    { question: "What is the name of Goku's signature energy attack?", answer: ["kamehameha", "kame hame ha"], points: 10 },
-                    { question: "Which anime features a notebook that can kill people?", answer: ["death note", "deathnote"], points: 10 },
-                    { question: "What is the name of the pirate crew led by Monkey D. Luffy?", answer: ["straw hat pirates", "strawhat pirates", "straw hats"], points: 10 },
-                    { question: "In 'Naruto', what is the name of Naruto's tailed beast?", answer: ["kurama", "nine tails", "nine-tails"], points: 10 },
-                    { question: "Which anime features giant humanoid creatures called Titans?", answer: ["attack on titan", "shingeki no kyojin"], points: 10 }
-                ]
-            },
-            football: {
-                questions: [
-                    { question: "Which country won the FIFA World Cup in 2018?", answer: ["france"], points: 10 },
-                    { question: "How many players are on a football team on the field?", answer: ["11", "eleven"], points: 10 },
-                    { question: "Which player has won the most Ballon d'Or awards?", answer: ["lionel messi", "messi"], points: 10 },
-                    { question: "What is the distance of a penalty kick from the goal line?", answer: ["12 yards", "11 meters", "eleven meters", "twelve yards"], points: 10 },
-                    { question: "Which English club has won the most Premier League titles?", answer: ["manchester united", "man united", "man utd"], points: 10 }
-                ]
-            },
-            knowledge: {
-                questions: [
-                    { question: "What is the capital of Japan?", answer: ["tokyo"], points: 10 },
-                    { question: "How many continents are there on Earth?", answer: ["7", "seven"], points: 10 },
-                    { question: "What is the largest planet in our solar system?", answer: ["jupiter"], points: 10 },
-                    { question: "What is the chemical symbol for gold?", answer: ["au"], points: 10 },
-                    { question: "In which year did World War II end?", answer: ["1945"], points: 10 }
-                ]
-            },
-            history: {
-                questions: [
-                    { question: "Who was the first President of the United States?", answer: ["george washington", "washington"], points: 10 },
-                    { question: "In which year did Christopher Columbus reach the Americas?", answer: ["1492"], points: 10 },
-                    { question: "Which ancient wonder of the world still stands today?", answer: ["great pyramid of giza", "pyramids of giza", "great pyramid"], points: 10 },
-                    { question: "Who wrote the Declaration of Independence?", answer: ["thomas jefferson", "jefferson"], points: 10 },
-                    { question: "Which empire built Machu Picchu?", answer: ["inca", "incan", "inca empire"], points: 10 }
-                ]
-            },
-            tv: {
-                questions: [
-                    { question: "What is the name of the coffee shop in Friends?", answer: ["central perk"], points: 10 },
-                    { question: "Which TV series features a high school chemistry teacher turned drug lord?", answer: ["breaking bad"], points: 10 },
-                    { question: "What is the name of the fictional continent in Game of Thrones?", answer: ["westeros"], points: 10 },
-                    { question: "Which animated series features a talking baby and a diabolical dog?", answer: ["family guy"], points: 10 },
-                    { question: "What is the name of the main character in The Office (US)?", answer: ["michael scott"], points: 10 }
-                ]
-            },
-            manga: {
-                questions: [
-                    { question: "Who is the creator of One Piece?", answer: ["eiichiro oda", "oda"], points: 10 },
-                    { question: "What is the name of the training manga about a weak boy becoming a hero?", answer: ["one punch man", "one-punch man"], points: 10 },
-                    { question: "Which manga features alchemy as its main power system?", answer: ["fullmetal alchemist", "full metal alchemist"], points: 10 },
-                    { question: "What is the name of Guts' massive sword in Berserk?", answer: ["dragonslayer", "dragon slayer"], points: 10 },
-                    { question: "Which manga features a world where everyone has superpowers called 'quirks'?", answer: ["my hero academia", "boku no hero academia"], points: 10 }
-                ]
+        // Load questions from each category file
+        for (const category of categories) {
+            try {
+                const response = await fetch(`questions/${category}.json`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.questions && Array.isArray(data.questions)) {
+                        // Add category info to each question
+                        const questionsWithCategory = data.questions.map(q => ({
+                            ...q,
+                            category: category
+                        }));
+                        allQuestions.push(...questionsWithCategory);
+                    }
+                } else {
+                    logError(`Failed to load category: ${category}`, { status: response.status });
+                }
+            } catch (fetchError) {
+                logError(`Error fetching ${category}.json`, { error: fetchError.message });
             }
+        }
+
+        // If no questions loaded, use fallback
+        if (allQuestions.length === 0) {
+            logError('No questions loaded from files, using fallback');
+            return {
+                questions: [
+                    { question: "What is 2 + 2?", answer: ["4", "four"], points: 10, category: "knowledge" },
+                    { question: "What color is the sky?", answer: ["blue"], points: 10, category: "knowledge" },
+                    { question: "How many days in a week?", answer: ["7", "seven"], points: 10, category: "knowledge" }
+                ]
+            };
+        }
+
+        // Shuffle all questions
+        const shuffled = allQuestions.sort(() => Math.random() - 0.5);
+        
+        return {
+            questions: shuffled
         };
 
-        return questionSets[category] || questionSets.knowledge;
     } catch (error) {
-        logError('Failed to load questions', { category, error: error.message });
-        // Return default questions as fallback
+        logError('Failed to load questions from files', { categories, error: error.message });
+        // Return fallback questions
         return {
             questions: [
-                { question: "What is 2 + 2?", answer: ["4", "four"], points: 10 },
-                { question: "What color is the sky?", answer: ["blue"], points: 10 },
-                { question: "How many days in a week?", answer: ["7", "seven"], points: 10 }
+                { question: "What is 2 + 2?", answer: ["4", "four"], points: 10, category: "knowledge" },
+                { question: "What color is the sky?", answer: ["blue"], points: 10, category: "knowledge" },
+                { question: "How many days in a week?", answer: ["7", "seven"], points: 10, category: "knowledge" }
             ]
         };
     }
@@ -386,27 +367,38 @@ function renderCategories() {
             <div class="category-icon">${categories[key].icon}</div>
             <div>${categories[key].name}</div>
         `;
-        btn.onclick = () => selectCategory(key);
+        btn.onclick = () => toggleCategory(key);
         selector.appendChild(btn);
     });
 
-    // Select first category by default
-    if (Object.keys(categories).length > 0) {
-        selectCategory(Object.keys(categories)[0]);
-    }
+    // Initialize selected categories array
+    document.getElementById('createRoomForm').dataset.selectedCategories = JSON.stringify([]);
 }
 
-function selectCategory(category) {
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.toggle('selected', btn.dataset.category === category);
-    });
-    document.getElementById('createRoomForm').dataset.selectedCategory = category;
+// NEW: Toggle category selection (multi-select)
+function toggleCategory(category) {
+    const form = document.getElementById('createRoomForm');
+    let selectedCategories = JSON.parse(form.dataset.selectedCategories || '[]');
+    
+    const btn = document.querySelector(`[data-category="${category}"]`);
+    
+    if (selectedCategories.includes(category)) {
+        // Remove category
+        selectedCategories = selectedCategories.filter(c => c !== category);
+        btn.classList.remove('selected');
+    } else {
+        // Add category
+        selectedCategories.push(category);
+        btn.classList.add('selected');
+    }
+    
+    form.dataset.selectedCategories = JSON.stringify(selectedCategories);
 }
 
 async function createRoom() {
     try {
         const hostName = document.getElementById('hostName').value.trim();
-        const selectedCategory = document.getElementById('createRoomForm').dataset.selectedCategory;
+        const selectedCategories = JSON.parse(document.getElementById('createRoomForm').dataset.selectedCategories || '[]');
         const timerDuration = parseInt(document.getElementById('timerSelect').value);
 
         if (!hostName) {
@@ -414,17 +406,17 @@ async function createRoom() {
             return;
         }
 
-        if (!selectedCategory) {
-            alert('Please select a category');
+        if (selectedCategories.length === 0) {
+            alert('Please select at least one category');
             return;
         }
 
-        // Load questions
-        const questionData = await loadQuestions(selectedCategory);
+        // Load questions from selected categories
+        const questionData = await loadQuestionsFromFiles(selectedCategories);
         
         const room = {
             code: generateRoomCode(),
-            category: selectedCategory,
+            categories: selectedCategories, // Store array of categories
             timerDuration: timerDuration,
             questions: questionData.questions,
             players: [],
@@ -592,6 +584,14 @@ function updateLobbyDisplay() {
     try {
         document.getElementById('lobbyRoomCode').textContent = currentRoom.code;
         document.getElementById('playerCount').textContent = currentRoom.players.length;
+        
+        // Display selected categories
+        const categoriesSpan = document.getElementById('lobbyCategories');
+        if (currentRoom.categories && currentRoom.categories.length > 0) {
+            categoriesSpan.textContent = currentRoom.categories.join(', ').toUpperCase();
+        } else {
+            categoriesSpan.textContent = 'MIXED';
+        }
         
         const playerList = document.getElementById('lobbyPlayerList');
         playerList.innerHTML = '';
@@ -850,9 +850,18 @@ function showAnswers() {
     try {
         const answersReveal = document.getElementById('answersReveal');
         const answersList = document.getElementById('answersList');
+        const correctAnswerDisplay = document.getElementById('correctAnswerDisplay');
         
         answersReveal.classList.remove('hidden');
         answersList.innerHTML = '';
+
+        // Display correct answer
+        if (currentQuestion && currentQuestion.answer && currentQuestion.answer.length > 0) {
+            correctAnswerDisplay.innerHTML = `<strong>Correct Answer:</strong> ${currentQuestion.answer.join(' OR ')}`;
+            correctAnswerDisplay.classList.remove('hidden');
+        } else {
+            correctAnswerDisplay.classList.add('hidden');
+        }
 
         // Sort players by score (descending)
         const sortedPlayers = [...currentRoom.players].sort((a, b) => b.score - a.score);
@@ -1170,7 +1179,7 @@ function startSoloGame() {
 
         const room = {
             code: roomCode,
-            category: 'knowledge',
+            categories: ['knowledge'],
             timerDuration: 30,
             questions: [],
             players: [player],
@@ -1183,7 +1192,7 @@ function startSoloGame() {
         };
 
         // Load questions for solo game
-        loadQuestions('knowledge').then(questionData => {
+        loadQuestionsFromFiles(['knowledge']).then(questionData => {
             room.questions = questionData.questions;
             
             currentRoom = room;
@@ -1340,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Add version info
-        const version = '1.0.0';
+        const version = '2.0.0';
         document.documentElement.dataset.version = version;
         
         console.log('Quiz Battle initialized successfully');

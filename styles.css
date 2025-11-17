@@ -736,6 +736,17 @@ input::placeholder {
     margin-bottom: 20px;
 }
 
+.correct-answer-display {
+    background: var(--accent-win);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: 1px solid rgba(100, 255, 150, 0.3);
+}
+
 .answer-item {
     background: var(--bg-secondary);
     padding: 20px;

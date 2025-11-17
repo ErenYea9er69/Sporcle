@@ -24,8 +24,9 @@
                 </div>
 
                 <div id="createRoomForm" class="hidden glass-card">
-                    <h2 style="margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Create Room</h2>
+                    <h2 style="margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Create Room - Select Categories</h2>
                     <div class="category-selector" id="categorySelector"></div>
+                    <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">Choose one or more categories</p>
                     <div class="input-group">
                         <input type="text" id="hostName" placeholder="Your name" maxlength="20">
                     </div>
@@ -64,6 +65,9 @@
             <div class="glass-card lobby-info">
                 <h2>Room: <span id="lobbyRoomCode" style="color: var(--text-primary); font-weight: 600;"></span></h2>
                 <p>Waiting for players... (<span id="playerCount">1</span>/10)</p>
+                <p style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">
+                    Categories: <span id="lobbyCategories" style="color: var(--text-secondary);"></span>
+                </p>
                 <div class="player-list" id="lobbyPlayerList"></div>
             </div>
             
@@ -106,6 +110,7 @@
 
                     <div class="answers-reveal hidden" id="answersReveal">
                         <h3>Answers</h3>
+                        <div class="correct-answer-display" id="correctAnswerDisplay" style="background: var(--accent-win); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 1.1em; font-weight: 500;"></div>
                         <div id="answersList"></div>
                         <div id="hostNextControls" class="hidden" style="margin-top: 20px;">
                             <button onclick="nextRound()" style="width: 100%;">Next Round</button>
