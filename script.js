@@ -191,7 +191,8 @@ async function loadQuestionsFromFiles(categories) {
         // Load questions from each category file
         for (const category of categories) {
             try {
-                const response = await fetch(`questions/${category}.json`);
+                // FIXED: Remove "questions/" prefix if files are in root directory
+                const response = await fetch(`${category}.json`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.questions && Array.isArray(data.questions)) {
