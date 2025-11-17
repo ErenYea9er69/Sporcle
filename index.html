@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Battle - Real Time Quiz Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                        inset 0 0 15px rgba(94, 234, 212, 0.1);
+            overflow: hidden;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+
+        .screen {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Screen */
+        .home-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #5eead4, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            background: linear-gradient(to right, #0ea5e9, #0d9488);
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        button:hover::after {
+            opacity: 1;
+        }
+
+        .secondary {
+            background: rgba(30, 41, 59, 0.7);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 4px 15px rgba(148, 163, 184, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 16px 20px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            font-size: 1em;
+            background: rgba(15, 23, 42, 0.5);
+            color: #e2e8f0;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Game Screen */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .room-code {
+            background: rgba(14, 165, 233, 0.15);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+            color: #5eead4;
+            border: 1px solid rgba(94, 234, 212, 0.2);
+        }
+
+        .round-info {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        .question-container {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .question {
+            font-size: 1.8em;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #f1f5f9;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 3em;
+            font-weight: 800;
+            margin: 10px 0;
+            background: linear-gradient(to right, #5eead4, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: linear-gradient(to right, #0ea5e9, #0d9488);
+            transition: width 0.1s linear;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+        }
+
+        .answer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .answer-input-container {
+            position: relative;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2em;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            color: #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(to right, #34d399, #10b981);
+        }
+
+        .submit-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-btn:disabled::after {
+            display: none;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .player-card {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-card.active {
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .player-card.answered {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .player-card.waiting {
+            opacity: 0.7;
+        }
+
+        .player-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #f1f5f9;
+        }
+
+        .player-score {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #5eead4;
+        }
+
+        .player-status {
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .status-ready { color: #10b981; }
+        .status-answered { color: #38bdf8; }
+        .status-waiting { color: #f59e0b; }
+
+        .host-controls {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        .toggle-switch {
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            background: #475569;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(to right, #0ea5e9, #0d9488);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        .answers-reveal {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+
+        .answer-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s;
+        }
+
+        .answer-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-player {
+            font-weight: 700;
+            color: #5eead4;
+            font-size: 1.1em;
+        }
+
+        .answer-text {
+            flex: 1;
+            font-size: 1.1em;
+            padding: 10px 15px;
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 8px;
+            color: #f1f5f9;
+        }
+
+        .answer-verdict {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .verdict-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .verdict-correct {
+            background: linear-gradient(to right, #10b981, #059669);
+            color: white;
+        }
+
+        .verdict-correct:hover {
+            background: linear-gradient(to right, #34d399, #10b981);
+        }
+
+        .verdict-wrong {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .verdict-wrong:hover {
+            background: linear-gradient(to right, #f87171, #ef4444);
+        }
+
+        .scoreboard {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(13, 148, 136, 0.2));
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+
+        .scoreboard-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #5eead4;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            font-size: 1.1em;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .score-rank {
+            font-weight: 700;
+            color: #38bdf8;
+            margin-right: 10px;
+        }
+
+        .score-name {
+            flex: 1;
+            color: #e2e8f0;
+        }
+
+        .score-points {
+            font-weight: 700;
+            color: #5eead4;
+        }
+
+        .visual-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: 800;
+            pointer-events: none;
+            animation: feedbackPop 0.6s ease-out;
+            z-index: 1000;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes feedbackPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .feedback-correct {
+            background: linear-gradient(to right, #10b981, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feedback-wrong {
+            background: linear-gradient(to right, #ef4444, #f87171);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .category-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .category-btn {
+            padding: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .category-btn:hover {
+            border-color: #38bdf8;
+            background: rgba(30, 41, 59, 0.7);
+        }
+
+        .category-btn.selected {
+            border-color: #38bdf8;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(13, 148, 136, 0.2));
+            color: #5eead4;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .category-btn:hover::before {
+            left: 100%;
+        }
+
+        .category-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .lobby-info {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+
+        .player-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .player-tag {
+            background: linear-gradient(to right, #0ea5e9, #0d9488);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .disconnected {
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .disconnected::after {
+            content: '⚠️';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1.2em;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5em;
+            }
+
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .players-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .question {
+                font-size: 1.4em;
+            }
+
+            .timer {
+                font-size: 2.5em;
+            }
+
+            .answer-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .category-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                max-width: 100%;
+            }
+        }
+
+        /* Desktop Enhancements */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 1400px;
+            }
+
+            .game-layout {
+                display: grid;
+                grid-template-columns: 1fr 300px;
+                gap: 30px;
+            }
+
+            .main-game-area {
+                order: 1;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+
+            .host-controls {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        /* Error Logging */
+        .error-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #ef4444, #dc2626);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            display: none;
+            z-index: 1000;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .error-indicator.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(30, 41, 59, 0.5);
+            border-top: 3px solid #5eead4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(94, 234, 212, 0.2);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #0ea5e9, #0d9488);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #38bdf8, #14b8a6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Error Indicator -->
+        <div class="error-indicator" id="errorIndicator"></div>
+
+        <!-- Home Screen -->
+        <div class="screen active" id="homeScreen">
+            <div class="home-screen">
+                <h1 class="logo">Quiz Battle</h1>
+                <p class="tagline">Real-time multiplayer quiz game</p>
+                
+                <div class="button-group">
+                    <button onclick="showCreateRoom()">Create Room</button>
+                    <button class="secondary" onclick="showJoinRoom()">Join Room</button>
+                    <button class="secondary" onclick="startSoloGame()">Solo Mode</button>
+                </div>
+
+                <div id="createRoomForm" class="hidden">
+                    <h2 style="margin-bottom: 20px;">Create Room</h2>
+                    <div class="category-selector" id="categorySelector"></div>
+                    <div class="input-group">
+                        <input type="text" id="hostName" placeholder="Your name" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <select id="timerSelect" style="padding: 15px; border-radius: 10px; font-size: 1em;">
+                            <option value="20">20 seconds</option>
+                            <option value="30" selected>30 seconds</option>
+                            <option value="45">45 seconds</option>
+                            <option value="60">1 minute</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <button onclick="createRoom()">Create Room</button>
+                        <button class="secondary" onclick="hideCreateRoom()">Back</button>
+                    </div>
+                </div>
+
+                <div id="joinRoomForm" class="hidden">
+                    <h2 style="margin-bottom: 20px;">Join Room</h2>
+                    <div class="input-group">
+                        <input type="text" id="joinRoomCode" placeholder="Room code" maxlength="6" style="text-transform: uppercase;">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="playerName" placeholder="Your name" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <button onclick="joinRoom()">Join Room</button>
+                        <button class="secondary" onclick="hideJoinRoom()">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lobby Screen -->
+        <div class="screen" id="lobbyScreen">
+            <div class="lobby-info">
+                <h2>Room: <span id="lobbyRoomCode"></span></h2>
+                <p style="margin: 10px 0;">Waiting for players... (<span id="playerCount">1</span>/10)</p>
+                <div class="player-list" id="lobbyPlayerList"></div>
+            </div>
+            
+            <div id="hostControlsLobby" class="hidden">
+                <button onclick="startGame()" style="width: 100%; margin-top: 20px;">Start Game</button>
+            </div>
+            
+            <div id="playerWaitingMessage" class="hidden">
+                <p style="text-align: center; margin-top: 20px; font-size: 1.1em;">Waiting for host to start...</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="game-layout">
+                <div class="main-game-area">
+                    <div class="game-header">
+                        <div class="room-code" id="gameRoomCode"></div>
+                        <div class="round-info">Round <span id="currentRound">1</span></div>
+                    </div>
+
+                    <div class="timer-container">
+                        <div class="timer" id="timerDisplay">30</div>
+                        <div class="timer-bar">
+                            <div class="timer-progress" id="timerProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question" id="questionText">Loading question...</div>
+                    </div>
+
+                    <div class="answer-section" id="answerSection">
+                        <div class="answer-input-container">
+                            <input type="text" class="answer-input" id="answerInput" placeholder="Enter your answer..." maxlength="100">
+                        </div>
+                        <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
+                    </div>
+
+                    <div class="answers-reveal hidden" id="answersReveal">
+                        <h3 style="margin-bottom: 15px;">Answers</h3>
+                        <div id="answersList"></div>
+                        <div id="hostNextControls" class="hidden" style="margin-top: 20px;">
+                            <button onclick="nextRound()" style="width: 100%;">Next Round</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="scoreboard" id="scoreboard">
+                        <div class="scoreboard-title">Scoreboard</div>
+                        <div id="scoreboardContent"></div>
+                    </div>
+
+                    <div class="players-grid" id="playersGrid"></div>
+
+                    <div class="host-controls hidden" id="hostControls">
+                        <h3 style="margin-bottom: 15px;">Host Controls</h3>
+                        <div class="control-group">
+                            <label>Auto-next round</label>
+                            <div class="toggle-switch" id="autoNextToggle" onclick="toggleAutoNext()"></div>
+                        </div>
+                        <button onclick="endGame()" style="width: 100%; background: #e74c3c; margin-top: 15px;">End Game</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="screen" id="gameOverScreen">
+            <div style="text-align: center; padding: 40px 20px;">
+                <h1 style="font-size: 3em; margin-bottom: 20px;">Game Over!</h1>
+                <div class="scoreboard" style="max-width: 400px; margin: 0 auto;">
+                    <div class="scoreboard-title">Final Scores</div>
+                    <div id="finalScores"></div>
+                </div>
+                <div class="button-group" style="margin-top: 30px;">
+                    <button onclick="playAgain()">Play Again</button>
+                    <button class="secondary" onclick="backToHome()">Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database wrapper for localStorage with fallback
+        const QuizDatabase = {
+            // Check if localStorage is available
+            isAvailable: () => {
+                try {
+                    const test = '__quizdb_test__';
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+
+            // Generate unique ID
+            generateId: () => Math.random().toString(36).substr(2, 9) + Date.now().toString(36),
+
+            // Save data
+            save: (key, data) => {
+                try {
+                    if (QuizDatabase.isAvailable()) {
+                        localStorage.setItem(`quizbattle_${key}`, JSON.stringify(data));
+                    } else {
+                        // Fallback to memory storage
+                        QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
+                        QuizDatabase.memoryStorage[key] = data;
+                    }
+                    return true;
+                } catch (error) {
+                    logError('Database save failed', { key, error: error.message });
+                    return false;
+                }
+            },
+
+            // Load data
+            load: (key) => {
+                try {
+                    if (QuizDatabase.isAvailable()) {
+                        const data = localStorage.getItem(`quizbattle_${key}`);
+                        return data ? JSON.parse(data) : null;
+                    } else {
+                        QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
+                        return QuizDatabase.memoryStorage[key] || null;
+                    }
+                } catch (error) {
+                    logError('Database load failed', { key, error: error.message });
+                    return null;
+                }
+            },
+
+            // Delete data
+            remove: (key) => {
+                try {
+                    if (QuizDatabase.isAvailable()) {
+                        localStorage.removeItem(`quizbattle_${key}`);
+                    } else {
+                        QuizDatabase.memoryStorage = QuizDatabase.memoryStorage || {};
+                        delete QuizDatabase.memoryStorage[key];
+                    }
+                    return true;
+                } catch (error) {
+                    logError('Database remove failed', { key, error: error.message });
+                    return false;
+                }
+            },
+
+            // Find all rooms
+            findAllRooms: () => {
+                try {
+                    if (QuizDatabase.isAvailable()) {
+                        const rooms = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && key.startsWith('quizbattle_room_')) {
+                                const room = QuizDatabase.load(key.replace('quizbattle_', ''));
+                                if (room && room.expires > Date.now()) {
+                                    rooms.push(room);
+                                } else if (room) {
+                                    QuizDatabase.remove(key.replace('quizbattle_', ''));
+                                }
+                            }
+                        }
+                        return rooms;
+                    } else {
+                        // Handle memory storage
+                        const rooms = [];
+                        if (QuizDatabase.memoryStorage) {
+                            Object.keys(QuizDatabase.memoryStorage).forEach(key => {
+                                if (key.startsWith('room_')) {
+                                    const room = QuizDatabase.memoryStorage[key];
+                                    if (room && room.expires > Date.now()) {
+                                        rooms.push(room);
+                                    } else if (room) {
+                                        delete QuizDatabase.memoryStorage[key];
+                                    }
+                                }
+                            });
+                        }
+                        return rooms;
+                    }
+                } catch (error) {
+                    logError('Find all rooms failed', { error: error.message });
+                    return [];
+                }
+            }
+        };
+
+        // Game state
+        let currentRoom = null;
+        let currentPlayer = null;
+        let isHost = false;
+        let gameInterval = null;
+        let timeLeft = 30;
+        let currentQuestion = null;
+        let hasAnswered = false;
+        let autoNextEnabled = false;
+        let heartbeatInterval = null;
+
+        // Error logging
+        function logError(message, context = {}) {
+            const error = {
+                message,
+                context,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                url: window.location.href,
+                roomCode: currentRoom ? currentRoom.code : null,
+                playerId: currentPlayer ? currentPlayer.id : null
+            };
+
+            // Store error locally
+            const errors = QuizDatabase.load('errors') || [];
+            errors.push(error);
+            if (errors.length > 50) errors.shift(); // Keep only last 50 errors
+            QuizDatabase.save('errors', errors);
+
+            // Show error indicator
+            const indicator = document.getElementById('errorIndicator');
+            indicator.textContent = '⚠️ Error logged';
+            indicator.classList.add('show');
+            indicator.onclick = () => {
+                console.error('Quiz Battle Error:', error);
+                alert(`Error: ${message}\nCheck console for details.`);
+            };
+
+            // Send to remote service if available
+            if (window.ERROR_REPORTING_URL) {
+                fetch(window.ERROR_REPORTING_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(error),
+                    keepalive: true
+                }).catch(() => {
+                    // Fail silently for error reporting
+                });
+            }
+
+            // Also log to console
+            console.error('Quiz Battle Error:', error);
+        }
+
+        // Window error handler
+        window.addEventListener('error', (event) => {
+            logError(event.message || 'Unhandled error', {
+                filename: event.filename,
+                lineno: event.lineno,
+                colno: event.colno,
+                error: event.error ? event.error.stack : null
+            });
+        });
+
+        // Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', (event) => {
+            logError('Unhandled promise rejection', {
+                reason: event.reason
+            });
+        });
+
+        // Room code generator
+        function generateRoomCode() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        // Question loading with error handling
+        async function loadQuestions(category) {
+            try {
+                // In a real implementation, these would be separate JSON files
+                // For demo purposes, we'll use inline data with a loading simulation
+                await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+                
+                const questionSets = {
+                    anime: {
+                        questions: [
+                            { question: "What is the name of Goku's signature energy attack?", answer: ["kamehameha", "kame hame ha"], points: 10 },
+                            { question: "Which anime features a notebook that can kill people?", answer: ["death note", "deathnote"], points: 10 },
+                            { question: "What is the name of the pirate crew led by Monkey D. Luffy?", answer: ["straw hat pirates", "strawhat pirates", "straw hats"], points: 10 },
+                            { question: "In 'Naruto', what is the name of Naruto's tailed beast?", answer: ["kurama", "nine tails", "nine-tails"], points: 10 },
+                            { question: "Which anime features giant humanoid creatures called Titans?", answer: ["attack on titan", "shingeki no kyojin"], points: 10 }
+                        ]
+                    },
+                    football: {
+                        questions: [
+                            { question: "Which country won the FIFA World Cup in 2018?", answer: ["france"], points: 10 },
+                            { question: "How many players are on a football team on the field?", answer: ["11", "eleven"], points: 10 },
+                            { question: "Which player has won the most Ballon d'Or awards?", answer: ["lionel messi", "messi"], points: 10 },
+                            { question: "What is the distance of a penalty kick from the goal line?", answer: ["12 yards", "11 meters", "eleven meters", "twelve yards"], points: 10 },
+                            { question: "Which English club has won the most Premier League titles?", answer: ["manchester united", "man united", "man utd"], points: 10 }
+                        ]
+                    },
+                    knowledge: {
+                        questions: [
+                            { question: "What is the capital of Japan?", answer: ["tokyo"], points: 10 },
+                            { question: "How many continents are there on Earth?", answer: ["7", "seven"], points: 10 },
+                            { question: "What is the largest planet in our solar system?", answer: ["jupiter"], points: 10 },
+                            { question: "What is the chemical symbol for gold?", answer: ["au"], points: 10 },
+                            { question: "In which year did World War II end?", answer: ["1945"], points: 10 }
+                        ]
+                    },
+                    history: {
+                        questions: [
+                            { question: "Who was the first President of the United States?", answer: ["george washington", "washington"], points: 10 },
+                            { question: "In which year did Christopher Columbus reach the Americas?", answer: ["1492"], points: 10 },
+                            { question: "Which ancient wonder of the world still stands today?", answer: ["great pyramid of giza", "pyramids of giza", "great pyramid"], points: 10 },
+                            { question: "Who wrote the Declaration of Independence?", answer: ["thomas jefferson", "jefferson"], points: 10 },
+                            { question: "Which empire built Machu Picchu?", answer: ["inca", "incan", "inca empire"], points: 10 }
+                        ]
+                    },
+                    tv: {
+                        questions: [
+                            { question: "What is the name of the coffee shop in Friends?", answer: ["central perk"], points: 10 },
+                            { question: "Which TV series features a high school chemistry teacher turned drug lord?", answer: ["breaking bad"], points: 10 },
+                            { question: "What is the name of the fictional continent in Game of Thrones?", answer: ["westeros"], points: 10 },
+                            { question: "Which animated series features a talking baby and a diabolical dog?", answer: ["family guy"], points: 10 },
+                            { question: "What is the name of the main character in The Office (US)?", answer: ["michael scott"], points: 10 }
+                        ]
+                    },
+                    manga: {
+                        questions: [
+                            { question: "Who is the creator of One Piece?", answer: ["eiichiro oda", "oda"], points: 10 },
+                            { question: "What is the name of the training manga about a weak boy becoming a hero?", answer: ["one punch man", "one-punch man"], points: 10 },
+                            { question: "Which manga features alchemy as its main power system?", answer: ["fullmetal alchemist", "full metal alchemist"], points: 10 },
+                            { question: "What is the name of Guts' massive sword in Berserk?", answer: ["dragonslayer", "dragon slayer"], points: 10 },
+                            { question: "Which manga features a world where everyone has superpowers called 'quirks'?", answer: ["my hero academia", "boku no hero academia"], points: 10 }
+                        ]
+                    }
+                };
+
+                return questionSets[category] || questionSets.knowledge;
+            } catch (error) {
+                logError('Failed to load questions', { category, error: error.message });
+                // Return default questions as fallback
+                return {
+                    questions: [
+                        { question: "What is 2 + 2?", answer: ["4", "four"], points: 10 },
+                        { question: "What color is the sky?", answer: ["blue"], points: 10 },
+                        { question: "How many days in a week?", answer: ["7", "seven"], points: 10 }
+                    ]
+                };
+            }
+        }
+
+        // Fuzzy matching algorithm
+        function fuzzyMatch(answer, correctAnswers) {
+            try {
+                const normalizedAnswer = answer.toLowerCase().trim().replace(/[^\w\s]/g, '');
+                
+                for (let correctAnswer of correctAnswers) {
+                    const normalizedCorrect = correctAnswer.toLowerCase().trim().replace(/[^\w\s]/g, '');
+                    
+                    // Exact match
+                    if (normalizedAnswer === normalizedCorrect) return 1;
+                    
+                    // Contains match
+                    if (normalizedAnswer.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedAnswer)) {
+                        return 0.9;
+                    }
+                    
+                    // Word by word matching
+                    const answerWords = normalizedAnswer.split(/\s+/);
+                    const correctWords = normalizedCorrect.split(/\s+/);
+                    
+                    let matchedWords = 0;
+                    for (let word of answerWords) {
+                        if (correctWords.some(cw => cw.includes(word) || word.includes(cw))) {
+                            matchedWords++;
+                        }
+                    }
+                    
+                    const wordMatchRatio = matchedWords / correctWords.length;
+                    if (wordMatchRatio >= 0.8) return 0.85;
+                    
+                    // Levenshtein distance for typos
+                    const levenshteinRatio = calculateLevenshteinRatio(normalizedAnswer, normalizedCorrect);
+                    if (levenshteinRatio > 0.85) return levenshteinRatio;
+                }
+                
+                return 0;
+            } catch (error) {
+                logError('Fuzzy match failed', { answer, correctAnswers, error: error.message });
+                return 0;
+            }
+        }
+
+        function calculateLevenshteinRatio(str1, str2) {
+            try {
+                const matrix = [];
+                const len1 = str1.length;
+                const len2 = str2.length;
+
+                if (len1 === 0) return len2 === 0 ? 1 : 0;
+                if (len2 === 0) return 0;
+
+                // Initialize matrix
+                for (let i = 0; i <= len2; i++) {
+                    matrix[i] = [i];
+                }
+                for (let j = 0; j <= len1; j++) {
+                    matrix[0][j] = j;
+                }
+
+                // Fill matrix
+                for (let i = 1; i <= len2; i++) {
+                    for (let j = 1; j <= len1; j++) {
+                        if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                            matrix[i][j] = matrix[i - 1][j - 1];
+                        } else {
+                            matrix[i][j] = Math.min(
+                                matrix[i - 1][j - 1] + 1,
+                                matrix[i][j - 1] + 1,
+                                matrix[i - 1][j] + 1
+                            );
+                        }
+                    }
+                }
+
+                // Calculate similarity ratio
+                const distance = matrix[len2][len1];
+                const maxLength = Math.max(len1, len2);
+                return 1 - (distance / maxLength);
+            } catch (error) {
+                logError('Levenshtein calculation failed', { error: error.message });
+                return 0;
+            }
+        }
+
+        // Room management
+        function showCreateRoom() {
+            document.getElementById('createRoomForm').classList.remove('hidden');
+            document.getElementById('joinRoomForm').classList.add('hidden');
+            renderCategories();
+        }
+
+        function hideCreateRoom() {
+            document.getElementById('createRoomForm').classList.add('hidden');
+        }
+
+        function showJoinRoom() {
+            document.getElementById('joinRoomForm').classList.remove('hidden');
+            document.getElementById('createRoomForm').classList.add('hidden');
+        }
+
+        function hideJoinRoom() {
+            document.getElementById('joinRoomForm').classList.add('hidden');
+        }
+
+        function renderCategories() {
+            const categories = {
+                anime: { name: "Anime", icon: "🎌" },
+                football: { name: "Football", icon: "⚽" },
+                knowledge: { name: "General Knowledge", icon: "🧠" },
+                history: { name: "History", icon: "📚" },
+                tv: { name: "TV Shows", icon: "📺" },
+                manga: { name: "Manga", icon: "📖" }
+            };
+
+            const selector = document.getElementById('categorySelector');
+            selector.innerHTML = '';
+
+            Object.keys(categories).forEach(key => {
+                const btn = document.createElement('div');
+                btn.className = 'category-btn';
+                btn.dataset.category = key;
+                btn.innerHTML = `
+                    <div class="category-icon">${categories[key].icon}</div>
+                    <div>${categories[key].name}</div>
+                `;
+                btn.onclick = () => selectCategory(key);
+                selector.appendChild(btn);
+            });
+
+            // Select first category by default
+            if (Object.keys(categories).length > 0) {
+                selectCategory(Object.keys(categories)[0]);
+            }
+        }
+
+        function selectCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.category === category);
+            });
+            document.getElementById('createRoomForm').dataset.selectedCategory = category;
+        }
+
+        async function createRoom() {
+            try {
+                const hostName = document.getElementById('hostName').value.trim();
+                const selectedCategory = document.getElementById('createRoomForm').dataset.selectedCategory;
+                const timerDuration = parseInt(document.getElementById('timerSelect').value);
+
+                if (!hostName) {
+                    alert('Please enter your name');
+                    return;
+                }
+
+                if (!selectedCategory) {
+                    alert('Please select a category');
+                    return;
+                }
+
+                // Load questions
+                const questionData = await loadQuestions(selectedCategory);
+                
+                const room = {
+                    code: generateRoomCode(),
+                    category: selectedCategory,
+                    timerDuration: timerDuration,
+                    questions: questionData.questions,
+                    players: [],
+                    currentRound: 0,
+                    isActive: false,
+                    expires: Date.now() + (6 * 60 * 60 * 1000), // Expire in 6 hours
+                    created: Date.now(),
+                    autoNext: false
+                };
+
+                const player = {
+                    id: QuizDatabase.generateId(),
+                    name: hostName,
+                    score: 0,
+                    isHost: true,
+                    answers: [],
+                    lastSeen: Date.now()
+                };
+
+                room.players.push(player);
+                currentRoom = room;
+                currentPlayer = player;
+                isHost = true;
+
+                QuizDatabase.save(`room_${room.code}`, room);
+                QuizDatabase.save(`player_${player.id}`, player);
+
+                showLobby();
+                startHeartbeat();
+
+                // Simulate loading for better UX
+                setTimeout(() => {
+                    updateLobbyDisplay();
+                }, 500);
+
+            } catch (error) {
+                logError('Failed to create room', { error: error.message });
+                alert('Failed to create room. Please try again.');
+            }
+        }
+
+        async function joinRoom() {
+            try {
+                const roomCode = document.getElementById('joinRoomCode').value.trim().toUpperCase();
+                const playerName = document.getElementById('playerName').value.trim();
+
+                if (!roomCode || roomCode.length < 4) {
+                    alert('Please enter a valid room code');
+                    return;
+                }
+
+                if (!playerName) {
+                    alert('Please enter your name');
+                    return;
+                }
+
+                const room = QuizDatabase.load(`room_${roomCode}`);
+                
+                if (!room) {
+                    alert('Room not found. Check the code and try again.');
+                    return;
+                }
+
+                if (room.isActive) {
+                    alert('Game is already in progress. Cannot join now.');
+                    return;
+                }
+
+                if (room.players.length >= 10) {
+                    alert('Room is full (max 10 players).');
+                    return;
+                }
+
+                const player = {
+                    id: QuizDatabase.generateId(),
+                    name: playerName,
+                    score: 0,
+                    isHost: false,
+                    answers: [],
+                    lastSeen: Date.now()
+                };
+
+                room.players.push(player);
+                currentRoom = room;
+                currentPlayer = player;
+                isHost = false;
+
+                QuizDatabase.save(`room_${room.code}`, room);
+                QuizDatabase.save(`player_${player.id}`, player);
+
+                showLobby();
+                startHeartbeat();
+                updateLobbyDisplay();
+
+            } catch (error) {
+                logError('Failed to join room', { error: error.message });
+                alert('Failed to join room. Please try again.');
+            }
+        }
+
+        function startHeartbeat() {
+            // Clear any existing heartbeat
+            if (heartbeatInterval) {
+                clearInterval(heartbeatInterval);
+            }
+
+            // Send heartbeat every 2 seconds
+            heartbeatInterval = setInterval(() => {
+                try {
+                    if (currentRoom && currentPlayer) {
+                        // Update player's last seen timestamp
+                        currentPlayer.lastSeen = Date.now();
+                        QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
+
+                        // Refresh room data
+                        const freshRoom = QuizDatabase.load(`room_${currentRoom.code}`);
+                        if (freshRoom) {
+                            // Remove disconnected players (no heartbeat for 10 seconds)
+                            freshRoom.players = freshRoom.players.filter(p => {
+                                const playerData = QuizDatabase.load(`player_${p.id}`);
+                                return playerData && (Date.now() - playerData.lastSeen < 10000);
+                            });
+
+                            // Update current room
+                            currentRoom = freshRoom;
+                            QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+
+                            // Check if still in room
+                            const stillInRoom = currentRoom.players.some(p => p.id === currentPlayer.id);
+                            if (!stillInRoom) {
+                                // Kicked out or disconnected
+                                clearInterval(heartbeatInterval);
+                                alert('You have been disconnected from the room.');
+                                backToHome();
+                                return;
+                            }
+
+                            // Update displays based on current screen
+                            if (document.getElementById('lobbyScreen').classList.contains('active')) {
+                                updateLobbyDisplay();
+                            } else if (document.getElementById('gameScreen').classList.contains('active')) {
+                                updateGameDisplay();
+                            }
+                        } else {
+                            // Room no longer exists
+                            clearInterval(heartbeatInterval);
+                            alert('Room no longer exists.');
+                            backToHome();
+                        }
+                    }
+                } catch (error) {
+                    logError('Heartbeat failed', { error: error.message });
+                }
+            }, 2000);
+        }
+
+        function showLobby() {
+            hideAllScreens();
+            document.getElementById('lobbyScreen').classList.add('active');
+        }
+
+        function updateLobbyDisplay() {
+            if (!currentRoom || !document.getElementById('lobbyScreen').classList.contains('active')) return;
+
+            try {
+                document.getElementById('lobbyRoomCode').textContent = currentRoom.code;
+                document.getElementById('playerCount').textContent = currentRoom.players.length;
+                
+                const playerList = document.getElementById('lobbyPlayerList');
+                playerList.innerHTML = '';
+                
+                // Sort players: host first, then by score
+                const sortedPlayers = [...currentRoom.players].sort((a, b) => {
+                    if (a.isHost && !b.isHost) return -1;
+                    if (!a.isHost && b.isHost) return 1;
+                    return b.score - a.score;
+                });
+
+                sortedPlayers.forEach(player => {
+                    const tag = document.createElement('div');
+                    tag.className = 'player-tag';
+                    if (player.id === currentPlayer.id) {
+                        tag.style.background = 'linear-gradient(to right, #667eea, #764ba2)';
+                    }
+                    tag.textContent = player.name + (player.isHost ? ' (Host)' : '');
+                    playerList.appendChild(tag);
+                });
+
+                // Show/hide controls based on host status
+                if (isHost) {
+                    document.getElementById('hostControlsLobby').classList.remove('hidden');
+                    document.getElementById('playerWaitingMessage').classList.add('hidden');
+                } else {
+                    document.getElementById('hostControlsLobby').classList.add('hidden');
+                    document.getElementById('playerWaitingMessage').classList.remove('hidden');
+                }
+            } catch (error) {
+                logError('Lobby display update failed', { error: error.message });
+            }
+        }
+
+        function startGame() {
+            if (!currentRoom || !isHost) return;
+
+            try {
+                if (currentRoom.players.length < 2) {
+                    if (!confirm('Start game with only 1 player? (Solo mode)')) {
+                        return;
+                    }
+                }
+
+                currentRoom.isActive = true;
+                currentRoom.currentRound = 0;
+                currentRoom.started = Date.now();
+                
+                // Initialize all players
+                currentRoom.players.forEach(player => {
+                    player.score = 0;
+                    player.answers = [];
+                    player.hasAnswered = false;
+                });
+
+                QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+                
+                hideAllScreens();
+                document.getElementById('gameScreen').classList.add('active');
+                nextRound();
+
+            } catch (error) {
+                logError('Failed to start game', { error: error.message });
+                alert('Failed to start game. Please try again.');
+            }
+        }
+
+        function nextRound() {
+            try {
+                if (!currentRoom || !currentPlayer) return;
+
+                // Clear any existing interval
+                if (gameInterval) {
+                    clearInterval(gameInterval);
+                    gameInterval = null;
+                }
+
+                // Reset state
+                hasAnswered = false;
+                document.getElementById('answerInput').value = '';
+                document.getElementById('answerInput').disabled = false;
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('answersReveal').classList.add('hidden');
+                document.getElementById('hostNextControls').classList.add('hidden');
+
+                // Check if game should end
+                if (currentRoom.currentRound >= 10 || currentRoom.currentRound >= currentRoom.questions.length) {
+                    endGame();
+                    return;
+                }
+
+                // Increment round
+                currentRoom.currentRound++;
+                QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+
+                // Get random question that hasn't been used
+                const availableQuestions = currentRoom.questions.filter((q, index) => 
+                    !currentRoom.players.some(p => 
+                        p.answers.some(a => a.questionIndex === index)
+                    )
+                );
+
+                if (availableQuestions.length === 0) {
+                    endGame();
+                    return;
+                }
+
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                const questionIndex = currentRoom.questions.indexOf(currentQuestion);
+
+                // Update UI
+                document.getElementById('currentRound').textContent = currentRoom.currentRound;
+                document.getElementById('questionText').textContent = currentQuestion.question;
+                
+                // Reset player states
+                currentRoom.players.forEach(player => {
+                    player.hasAnswered = false;
+                    player.currentAnswer = null;
+                });
+
+                // Start timer
+                timeLeft = currentRoom.timerDuration;
+                updateTimerDisplay();
+                
+                gameInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(gameInterval);
+                        timeUp();
+                    }
+                }, 1000);
+
+                updateGameDisplay();
+
+            } catch (error) {
+                logError('Failed to start new round', { error: error.message });
+                alert('Error starting new round. Returning to home.');
+                backToHome();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerProgress = document.getElementById('timerProgress');
+            
+            timerDisplay.textContent = timeLeft;
+            timerDisplay.style.color = timeLeft <= 10 ? '#e74c3c' : '#333';
+            
+            const progressPercent = (timeLeft / currentRoom.timerDuration) * 100;
+            timerProgress.style.width = progressPercent + '%';
+            timerProgress.style.background = timeLeft <= 10 ? 
+                'linear-gradient(to right, #e74c3c, #c0392b)' : 
+                'linear-gradient(to right, #667eea, #764ba2)';
+        }
+
+        function timeUp() {
+            try {
+                // Auto-submit empty answers for players who didn't answer
+                currentRoom.players.forEach(player => {
+                    if (!player.hasAnswered) {
+                        const answerIndex = currentRoom.questions.indexOf(currentQuestion);
+                        player.answers.push({
+                            questionIndex: answerIndex,
+                            answer: '',
+                            isCorrect: false,
+                            points: 0,
+                            timestamp: Date.now()
+                        });
+                        player.hasAnswered = true;
+                    }
+                });
+
+                QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+                showAnswers();
+            } catch (error) {
+                logError('Time up handling failed', { error: error.message });
+            }
+        }
+
+        function submitAnswer() {
+            if (hasAnswered || !currentQuestion || !currentPlayer) return;
+
+            try {
+                const answerInput = document.getElementById('answerInput');
+                const answer = answerInput.value.trim();
+                
+                if (!answer) {
+                    alert('Please enter an answer');
+                    return;
+                }
+
+                // Disable further input
+                hasAnswered = true;
+                answerInput.disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+
+                // Calculate fuzzy match score
+                const matchScore = fuzzyMatch(answer, currentQuestion.answer);
+                const isCorrect = matchScore >= 0.8;
+                const points = isCorrect ? currentQuestion.points : 0;
+
+                // Add bonus points for quick answers
+                const timeBonus = Math.floor((timeLeft / currentRoom.timerDuration) * 5);
+                const totalPoints = points + (isCorrect ? timeBonus : 0);
+
+                // Store answer
+                const questionIndex = currentRoom.questions.indexOf(currentQuestion);
+                currentPlayer.answers.push({
+                    questionIndex: questionIndex,
+                    answer: answer,
+                    isCorrect: isCorrect,
+                    points: totalPoints,
+                    matchScore: matchScore,
+                    timestamp: Date.now()
+                });
+
+                // Update score immediately
+                if (isCorrect) {
+                    currentPlayer.score += totalPoints;
+                }
+
+                currentPlayer.hasAnswered = true;
+                QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
+
+                // Update room data
+                const playerIndex = currentRoom.players.findIndex(p => p.id === currentPlayer.id);
+                if (playerIndex !== -1) {
+                    currentRoom.players[playerIndex] = currentPlayer;
+                    QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+                }
+
+                // Show visual feedback
+                showVisualFeedback(isCorrect ? '✓' : '✗', isCorrect ? 'feedback-correct' : 'feedback-wrong');
+
+                // Check if all players have answered
+                if (currentRoom.players.every(p => p.hasAnswered)) {
+                    clearInterval(gameInterval);
+                    setTimeout(showAnswers, 1000);
+                }
+
+                updateGameDisplay();
+
+            } catch (error) {
+                logError('Answer submission failed', { error: error.message });
+                alert('Failed to submit answer. Please try again.');
+                // Re-enable input on error
+                hasAnswered = false;
+                document.getElementById('answerInput').disabled = false;
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        function showAnswers() {
+            try {
+                const answersReveal = document.getElementById('answersReveal');
+                const answersList = document.getElementById('answersList');
+                
+                answersReveal.classList.remove('hidden');
+                answersList.innerHTML = '';
+
+                // Sort players by score (descending)
+                const sortedPlayers = [...currentRoom.players].sort((a, b) => b.score - a.score);
+
+                sortedPlayers.forEach(player => {
+                    const answer = player.answers.find(a => a.questionIndex === currentRoom.questions.indexOf(currentQuestion));
+                    if (!answer) return;
+
+                    const answerItem = document.createElement('div');
+                    answerItem.className = 'answer-item';
+                    
+                    const isCorrect = answer.isCorrect;
+                    const verdictClass = isCorrect ? 'verdict-correct' : 'verdict-wrong';
+                    const verdictText = isCorrect ? '✓' : '✗';
+                    
+                    answerItem.innerHTML = `
+                        <div class="answer-player">${player.name}</div>
+                        <div class="answer-text">${answer.answer || '(No answer)'}</div>
+                        <div class="answer-verdict">
+                            <span style="font-size: 1.5em; font-weight: bold; ${isCorrect ? 'color: #27ae60' : 'color: #e74c3c'}">${verdictText}</span>
+                            <span style="font-weight: bold; color: #f39c12;">${answer.points} pts</span>
+                        </div>
+                    `;
+
+                    // Add host controls for manual override
+                    if (isHost && !answer.isCorrect) {
+                        const correctBtn = document.createElement('button');
+                        correctBtn.className = 'verdict-btn verdict-correct';
+                        correctBtn.textContent = 'Mark Correct';
+                        correctBtn.onclick = () => overrideAnswer(player.id, true);
+                        
+                        const wrongBtn = document.createElement('button');
+                        wrongBtn.className = 'verdict-btn verdict-wrong';
+                        wrongBtn.textContent = 'Confirm Wrong';
+                        wrongBtn.onclick = () => overrideAnswer(player.id, false);
+                        
+                        const controlDiv = document.createElement('div');
+                        controlDiv.style.display = 'flex';
+                        controlDiv.style.gap = '10px';
+                        controlDiv.appendChild(correctBtn);
+                        controlDiv.appendChild(wrongBtn);
+                        
+                        answerItem.appendChild(controlDiv);
+                    }
+
+                    answersList.appendChild(answerItem);
+                });
+
+                // Update host controls
+                if (isHost) {
+                    document.getElementById('hostNextControls').classList.remove('hidden');
+                    
+                    // Auto-next if enabled
+                    if (autoNextEnabled) {
+                        setTimeout(() => {
+                            if (autoNextEnabled) {
+                                nextRound();
+                            }
+                        }, 3000);
+                    }
+                }
+
+                // Update final game display
+                updateGameDisplay();
+
+            } catch (error) {
+                logError('Failed to show answers', { error: error.message });
+            }
+        }
+
+        function overrideAnswer(playerId, markAsCorrect) {
+            try {
+                const player = currentRoom.players.find(p => p.id === playerId);
+                if (!player) return;
+
+                const answer = player.answers.find(a => a.questionIndex === currentRoom.questions.indexOf(currentQuestion));
+                if (!answer) return;
+
+                // Revert previous score
+                if (answer.isCorrect) {
+                    player.score -= answer.points;
+                }
+
+                // Apply new verdict
+                answer.isCorrect = markAsCorrect;
+                if (markAsCorrect) {
+                    answer.points = currentQuestion.points;
+                    player.score += answer.points;
+                } else {
+                    answer.points = 0;
+                }
+
+                // Update database
+                QuizDatabase.save(`player_${player.id}`, player);
+                QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+
+                // Refresh display
+                showAnswers();
+                updateGameDisplay();
+
+                // Visual feedback
+                showVisualFeedback(markAsCorrect ? 'Updated to ✓' : 'Confirmed ✗', 'feedback-correct');
+
+            } catch (error) {
+                logError('Failed to override answer', { error: error.message });
+                alert('Failed to update answer. Please try again.');
+            }
+        }
+
+        function updateGameDisplay() {
+            if (!currentRoom || !document.getElementById('gameScreen').classList.contains('active')) return;
+
+            try {
+                // Update room code
+                document.getElementById('gameRoomCode').textContent = currentRoom.code;
+
+                // Update scoreboard
+                const scoreboardContent = document.getElementById('scoreboardContent');
+                scoreboardContent.innerHTML = '';
+
+                const sortedPlayers = [...currentRoom.players].sort((a, b) => b.score - a.score);
+                sortedPlayers.forEach((player, index) => {
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item';
+                    
+                    const rank = index + 1;
+                    const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                    
+                    scoreItem.innerHTML = `
+                        <span class="score-rank">${rankEmoji}</span>
+                        <span class="score-name">${player.name}</span>
+                        <span class="score-points">${player.score} pts</span>
+                    `;
+                    
+                    // Highlight current player
+                    if (player.id === currentPlayer.id) {
+                        scoreItem.style.background = 'linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(13, 148, 136, 0.2))';
+                        scoreItem.style.borderRadius = '8px';
+                        scoreItem.style.padding = '12px 10px';
+                    }
+                    
+                    scoreboardContent.appendChild(scoreItem);
+                });
+
+                // Update players grid
+                const playersGrid = document.getElementById('playersGrid');
+                playersGrid.innerHTML = '';
+
+                sortedPlayers.forEach(player => {
+                    const playerCard = document.createElement('div');
+                    playerCard.className = 'player-card';
+                    
+                    // Determine status
+                    let status = 'waiting';
+                    let statusText = 'Waiting...';
+                    
+                    if (player.hasAnswered) {
+                        status = 'answered';
+                        statusText = 'Answered';
+                    } else if (player.id === currentPlayer.id && !hasAnswered) {
+                        status = 'active';
+                        statusText = 'Your turn!';
+                    }
+
+                    if (player.id === currentPlayer.id) {
+                        playerCard.classList.add('active');
+                    }
+
+                    playerCard.classList.add(status);
+                    
+                    playerCard.innerHTML = `
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-score">${player.score}</div>
+                        <div class="player-status status-${status}">${statusText}</div>
+                    `;
+                    
+                    playersGrid.appendChild(playerCard);
+                });
+
+                // Show/hide host controls
+                if (isHost) {
+                    document.getElementById('hostControls').classList.remove('hidden');
+                    document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
+                } else {
+                    document.getElementById('hostControls').classList.add('hidden');
+                }
+
+            } catch (error) {
+                logError('Game display update failed', { error: error.message });
+            }
+        }
+
+        function toggleAutoNext() {
+            if (!isHost) return;
+            
+            autoNextEnabled = !autoNextEnabled;
+            currentRoom.autoNext = autoNextEnabled;
+            QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+            
+            document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
+            
+            // If enabled and answers are showing, start countdown
+            if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
+                setTimeout(() => {
+                    if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
+                        nextRound();
+                    }
+                }, 3000);
+            }
+        }
+
+        function showVisualFeedback(text, className) {
+            const feedback = document.createElement('div');
+            feedback.className = `visual-feedback ${className}`;
+            feedback.textContent = text;
+            document.body.appendChild(feedback);
+
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 600);
+        }
+
+        function endGame() {
+            try {
+                if (gameInterval) {
+                    clearInterval(gameInterval);
+                    gameInterval = null;
+                }
+
+                if (heartbeatInterval) {
+                    clearInterval(heartbeatInterval);
+                    heartbeatInterval = null;
+                }
+
+                // Update final scores
+                if (currentRoom) {
+                    currentRoom.isActive = false;
+                    QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+                }
+
+                // Show game over screen
+                hideAllScreens();
+                document.getElementById('gameOverScreen').classList.add('active');
+
+                // Display final scores
+                const finalScores = document.getElementById('finalScores');
+                finalScores.innerHTML = '';
+
+                const sortedPlayers = [...currentRoom.players].sort((a, b) => b.score - a.score);
+                sortedPlayers.forEach((player, index) => {
+                    const rank = index + 1;
+                    const rankEmoji = rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                    
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item';
+                    scoreItem.innerHTML = `
+                        <span class="score-rank">${rankEmoji}</span>
+                        <span class="score-name">${player.name}</span>
+                        <span class="score-points">${player.score} pts</span>
+                    `;
+                    finalScores.appendChild(scoreItem);
+                });
+
+                // Clean up old rooms after 1 hour
+                setTimeout(() => {
+                    if (currentRoom && currentRoom.code) {
+                        QuizDatabase.remove(`room_${currentRoom.code}`);
+                    }
+                }, 60 * 60 * 1000);
+
+            } catch (error) {
+                logError('Failed to end game properly', { error: error.message });
+            }
+        }
+
+        function playAgain() {
+            // Reset state
+            if (currentRoom && currentPlayer) {
+                if (isHost) {
+                    // Host can restart the same room
+                    currentRoom.isActive = false;
+                    currentRoom.currentRound = 0;
+                    currentRoom.players.forEach(player => {
+                        player.score = 0;
+                        player.answers = [];
+                    });
+                    QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+                    
+                    hideAllScreens();
+                    document.getElementById('lobbyScreen').classList.add('active');
+                    updateLobbyDisplay();
+                } else {
+                    // Player joins a new game
+                    backToHome();
+                }
+            } else {
+                backToHome();
+            }
+        }
+
+        function startSoloGame() {
+            try {
+                // Create a solo room
+                const roomCode = 'SOLO_' + generateRoomCode();
+                const player = {
+                    id: QuizDatabase.generateId(),
+                    name: 'Player',
+                    score: 0,
+                    isHost: true,
+                    answers: [],
+                    lastSeen: Date.now()
+                };
+
+                const room = {
+                    code: roomCode,
+                    category: 'knowledge',
+                    timerDuration: 30,
+                    questions: [],
+                    players: [player],
+                    currentRound: 0,
+                    isActive: false,
+                    expires: Date.now() + (2 * 60 * 60 * 1000), // 2 hours for solo
+                    created: Date.now(),
+                    autoNext: false,
+                    isSolo: true
+                };
+
+                // Load questions for solo game
+                loadQuestions('knowledge').then(questionData => {
+                    room.questions = questionData.questions;
+                    
+                    currentRoom = room;
+                    currentPlayer = player;
+                    isHost = true;
+
+                    QuizDatabase.save(`room_${room.code}`, room);
+                    QuizDatabase.save(`player_${player.id}`, player);
+
+                    // Start game immediately
+                    hideAllScreens();
+                    document.getElementById('gameScreen').classList.add('active');
+                    startHeartbeat();
+                    nextRound();
+                });
+
+            } catch (error) {
+                logError('Failed to start solo game', { error: error.message });
+                alert('Failed to start solo game. Please try again.');
+            }
+        }
+
+        function backToHome() {
+            // Clean up
+            if (gameInterval) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+            }
+
+            if (heartbeatInterval) {
+                clearInterval(heartbeatInterval);
+                heartbeatInterval = null;
+            }
+
+            // Reset state
+            currentRoom = null;
+            currentPlayer = null;
+            isHost = false;
+            hasAnswered = false;
+            autoNextEnabled = false;
+            currentQuestion = null;
+
+            hideAllScreens();
+            document.getElementById('homeScreen').classList.add('active');
+            hideCreateRoom();
+            hideJoinRoom();
+
+            // Clear forms
+            document.getElementById('hostName').value = '';
+            document.getElementById('joinRoomCode').value = '';
+            document.getElementById('playerName').value = '';
+        }
+
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Enter to submit answer
+            if (e.key === 'Enter' && document.getElementById('answerInput') === document.activeElement && !hasAnswered) {
+                e.preventDefault();
+                submitAnswer();
+            }
+
+            // Space to start game (host in lobby)
+            if (e.key === ' ' && isHost && document.getElementById('lobbyScreen').classList.contains('active')) {
+                e.preventDefault();
+                startGame();
+            }
+
+            // Escape to go back
+            if (e.key === 'Escape' && !document.getElementById('homeScreen').classList.contains('active')) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to leave? Your progress will be lost.')) {
+                    backToHome();
+                }
+            }
+        });
+
+        // Input validation
+        document.getElementById('joinRoomCode').addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+
+        document.getElementById('hostName').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
+        });
+
+        document.getElementById('playerName').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
+        });
+
+        document.getElementById('answerInput').addEventListener('input', (e) => {
+            // Show fuzzy match score in real-time (optional feature)
+            if (currentQuestion && !hasAnswered) {
+                const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
+                if (matchScore > 0.7) {
+                    e.target.style.borderColor = '#27ae60';
+                } else if (matchScore > 0.4) {
+                    e.target.style.borderColor = '#f39c12';
+                } else {
+                    e.target.style.borderColor = '#ddd';
+                }
+            }
+        });
+
+        // Auto-cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (currentRoom && currentRoom.code && !currentRoom.isSolo) {
+                // Mark player as disconnected
+                if (currentPlayer) {
+                    currentPlayer.lastSeen = Date.now() - 30000; // Mark as disconnected
+                    QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
+                }
+            }
+        });
+
+        // Periodically clean up expired rooms (every 10 minutes)
+        setInterval(() => {
+            try {
+                const rooms = QuizDatabase.findAllRooms();
+                const now = Date.now();
+                let cleanedCount = 0;
+                
+                rooms.forEach(room => {
+                    if (room.expires < now) {
+                        QuizDatabase.remove(`room_${room.code}`);
+                        cleanedCount++;
+                    }
+                });
+                
+                if (cleanedCount > 0) {
+                    console.log(`Cleaned up ${cleanedCount} expired rooms`);
+                }
+            } catch (error) {
+                logError('Room cleanup failed', { error: error.message });
+            }
+        }, 10 * 60 * 1000);
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                // Clean up any expired rooms on startup
+                const rooms = QuizDatabase.findAllRooms();
+                console.log(`Found ${rooms.length} active rooms`);
+                
+                // Check for any errors in storage
+                const errors = QuizDatabase.load('errors') || [];
+                if (errors.length > 0) {
+                    console.log(`Found ${errors.length} stored errors`);
+                }
+
+                // Add version info
+                const version = '1.0.0';
+                document.documentElement.dataset.version = version;
+                
+                console.log('Quiz Battle initialized successfully');
+            } catch (error) {
+                logError('App initialization failed', { error: error.message });
+            }
+        });
+
+        // Expose functions globally for debugging
+        window.QuizBattle = {
+            createRoom,
+            joinRoom,
+            startGame,
+            submitAnswer,
+            nextRound,
+            endGame,
+            backToHome,
+            fuzzyMatch,
+            currentRoom,
+            currentPlayer,
+            isHost,
+            logError,
+            QuizDatabase
+        };
+    </script>
+</body>
+</html>
