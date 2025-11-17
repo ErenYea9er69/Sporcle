@@ -277,6 +277,7 @@ button.secondary:hover {
     margin-top: 20px;
     justify-content: center;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
 input[type="text"],
@@ -439,29 +440,19 @@ input::placeholder {
 
 .game-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 32px;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-.room-code {
-    background: var(--accent-highlight);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 1.2em;
-    letter-spacing: 1px;
-    color: var(--text-primary);
-    border: 1px solid var(--border-accent);
-}
-
 .round-info {
-    font-size: 12px;
-    letter-spacing: 1px;
+    font-size: 14px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* ====================================
@@ -525,6 +516,69 @@ input::placeholder {
 }
 
 /* ====================================
+   POINTS SELECTION
+   ==================================== */
+.points-selection {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+}
+
+.points-selection h3 {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.point-btn {
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--text-primary);
+}
+
+.point-btn:hover:not(.used):not(.selected) {
+    background: var(--bg-tertiary);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
+}
+
+.point-btn.selected {
+    background: var(--quiz-primary);
+    border-color: var(--border-accent);
+    box-shadow: 0 0 15px rgba(100, 150, 255, 0.3);
+}
+
+.point-btn.used {
+    background: var(--bg-tertiary);
+    opacity: 0.3;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* ====================================
    ANSWER SECTION
    ==================================== */
 .answer-section {
@@ -569,81 +623,6 @@ input::placeholder {
     background: var(--accent-highlight);
     border-color: var(--border-accent);
 }
-
-/* ====================================
-   PLAYERS GRID
-   ==================================== */
-.players-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.player-card {
-    background: var(--bg-secondary);
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid var(--border-subtle);
-    transition: all var(--transition-medium);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-}
-
-.player-card:hover {
-    border-color: var(--border-medium);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-
-.player-card.active {
-    border-color: var(--border-accent);
-    background: var(--accent-highlight);
-    box-shadow: var(--shadow-lg), 0 0 20px rgba(255, 255, 255, 0.05);
-}
-
-.player-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--border-accent), transparent);
-    transform: translateX(-100%);
-    transition: transform var(--transition-slow);
-}
-
-.player-card:hover::after {
-    transform: translateX(100%);
-}
-
-.player-name {
-    font-weight: 500;
-    margin-bottom: 8px;
-    font-size: 1.1em;
-    color: var(--text-primary);
-}
-
-.player-score {
-    font-size: 1.5em;
-    font-weight: 300;
-    color: var(--text-secondary);
-    font-feature-settings: 'tnum';
-    font-variant-numeric: tabular-nums;
-}
-
-.player-status {
-    font-size: 0.9em;
-    margin-top: 8px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-
-.status-ready { color: var(--quiz-primary); }
-.status-answered { color: var(--border-accent); }
-.status-waiting { color: var(--text-muted); }
 
 /* ====================================
    HOST CONTROLS
@@ -1041,10 +1020,6 @@ input::placeholder {
         padding: 24px;
     }
     
-    .players-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-    
     .timer {
         font-size: 2.5em;
     }
@@ -1074,6 +1049,11 @@ input::placeholder {
     select {
         min-width: 100%;
     }
+    
+    .points-grid {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 8px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1086,12 +1066,12 @@ input::placeholder {
         font-size: 2em;
     }
     
-    .players-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .game-header {
         flex-direction: column;
         text-align: center;
+    }
+    
+    .points-grid {
+        grid-template-columns: repeat(5, 1fr);
     }
 }
