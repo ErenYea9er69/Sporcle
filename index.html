@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Battle - Real Time Quiz Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <!-- Error Indicator -->
-        <div class="error-indicator" id="errorIndicator"></div>
+        <div class="error-indicator hidden" id="errorIndicator"></div>
 
         <!-- Home Screen -->
-        <div class="screen active glass-card" id="homeScreen">
+        <div class="screen active" id="homeScreen">
             <div class="home-screen">
                 <h1 class="logo">Quiz Battle</h1>
                 <p class="tagline">Real-time multiplayer quiz game</p>
@@ -23,14 +23,14 @@
                     <button class="secondary" onclick="startSoloGame()">Solo Mode</button>
                 </div>
 
-                <div id="createRoomForm" class="hidden">
+                <div id="createRoomForm" class="hidden glass-card">
                     <h2 style="margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Create Room</h2>
                     <div class="category-selector" id="categorySelector"></div>
                     <div class="input-group">
                         <input type="text" id="hostName" placeholder="Your name" maxlength="20">
                     </div>
                     <div class="input-group">
-                        <select id="timerSelect" style="padding: 16px; border-radius: 10px; font-size: 1em; background: var(--bg-secondary); border: 1px solid var(--border-subtle); color: var(--text-primary);">
+                        <select id="timerSelect">
                             <option value="20">20 seconds</option>
                             <option value="30" selected>30 seconds</option>
                             <option value="45">45 seconds</option>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div id="joinRoomForm" class="hidden">
+                <div id="joinRoomForm" class="hidden glass-card">
                     <h2 style="margin-bottom: 20px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Join Room</h2>
                     <div class="input-group">
                         <input type="text" id="joinRoomCode" placeholder="Room code" maxlength="6" style="text-transform: uppercase;">
@@ -60,10 +60,10 @@
         </div>
 
         <!-- Lobby Screen -->
-        <div class="screen glass-card" id="lobbyScreen">
-            <div class="lobby-info">
-                <h2 style="font-size: 14px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary);">Room: <span id="lobbyRoomCode" style="color: var(--text-primary); font-weight: 600;"></span></h2>
-                <p style="margin: 16px 0; color: var(--text-muted); font-size: 12px; letter-spacing: 1px;">Waiting for players... (<span id="playerCount">1</span>/10)</p>
+        <div class="screen" id="lobbyScreen">
+            <div class="glass-card lobby-info">
+                <h2>Room: <span id="lobbyRoomCode" style="color: var(--text-primary); font-weight: 600;"></span></h2>
+                <p>Waiting for players... (<span id="playerCount">1</span>/10)</p>
                 <div class="player-list" id="lobbyPlayerList"></div>
             </div>
             
@@ -71,7 +71,7 @@
                 <button onclick="startGame()" style="width: 100%; margin-top: 20px;">Start Game</button>
             </div>
             
-            <div id="playerWaitingMessage" class="hidden">
+            <div id="playerWaitingMessage" class="hidden glass-card">
                 <p style="text-align: center; margin-top: 20px; font-size: 12px; letter-spacing: 1px; color: var(--text-muted);">Waiting for host to start...</p>
                 <div class="spinner"></div>
             </div>
@@ -83,7 +83,7 @@
                 <div class="main-game-area">
                     <div class="game-header">
                         <div class="room-code" id="gameRoomCode"></div>
-                        <div class="round-info" style="font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted);">Round <span id="currentRound">1</span></div>
+                        <div class="round-info">Round <span id="currentRound">1</span></div>
                     </div>
 
                     <div class="timer-container">
@@ -104,8 +104,8 @@
                         <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
                     </div>
 
-                    <div class="answers-reveal hidden glass-card" id="answersReveal">
-                        <h3 style="margin-bottom: 15px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Answers</h3>
+                    <div class="answers-reveal hidden" id="answersReveal">
+                        <h3>Answers</h3>
                         <div id="answersList"></div>
                         <div id="hostNextControls" class="hidden" style="margin-top: 20px;">
                             <button onclick="nextRound()" style="width: 100%;">Next Round</button>
@@ -114,20 +114,20 @@
                 </div>
 
                 <div class="sidebar">
-                    <div class="scoreboard glass-card" id="scoreboard">
+                    <div class="scoreboard" id="scoreboard">
                         <div class="scoreboard-title">Scoreboard</div>
                         <div id="scoreboardContent"></div>
                     </div>
 
                     <div class="players-grid" id="playersGrid"></div>
 
-                    <div class="host-controls glass-card hidden" id="hostControls">
-                        <h3 style="margin-bottom: 15px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">Host Controls</h3>
+                    <div class="host-controls hidden" id="hostControls">
+                        <h3>Host Controls</h3>
                         <div class="control-group">
-                            <label style="display: block; margin-bottom: 8px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted);">Auto-next round</label>
+                            <label>Auto-next round</label>
                             <div class="toggle-switch" id="autoNextToggle" onclick="toggleAutoNext()"></div>
                         </div>
-                        <button onclick="endGame()" style="width: 100%; background: linear-gradient(to right, #ef4444, #dc2626); margin-top: 15px;">End Game</button>
+                        <button onclick="endGame()" style="width: 100%; margin-top: 15px;">End Game</button>
                     </div>
                 </div>
             </div>
@@ -135,8 +135,8 @@
 
         <!-- Game Over Screen -->
         <div class="screen" id="gameOverScreen">
-            <div class="glass-card" style="text-align: center; padding: 40px 20px;">
-                <h1 style="font-size: clamp(32px, 8vw, 48px); margin-bottom: 20px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; background: linear-gradient(to right, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; background-clip: text; color: transparent;">Game Over!</h1>
+            <div class="glass-card game-over-content">
+                <h1>Game Over!</h1>
                 <div class="scoreboard" style="max-width: 400px; margin: 0 auto;">
                     <div class="scoreboard-title">Final Scores</div>
                     <div id="finalScores"></div>
