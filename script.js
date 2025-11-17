@@ -1,5 +1,6 @@
 // Quiz Battle - Main Entry Point
 import { 
+    currentRoom, currentPlayer, isHost, gameInterval, timeLeft, currentQuestion, hasAnswered, autoNextEnabled, heartbeatInterval,
     setCurrentRoom, setCurrentPlayer, setIsHost, setGameInterval, setTimeLeft,
     setCurrentQuestion, setHasAnswered, setAutoNextEnabled, setHeartbeatInterval
 } from './config.js';
@@ -7,6 +8,7 @@ import { initErrorHandlers, logError } from './error-handler.js';
 import { QuizDatabase } from './database.js';
 import { backToHome, startSoloGame, createRoom, joinRoom, startGame, submitAnswer, nextRound, playAgain, toggleAutoNext } from './game.js';
 import { updateLobbyDisplay, updateGameDisplay, renderCategories, toggleCategory } from './ui.js';
+import { fuzzyMatch } from './questions.js';
 
 // Initialize error handlers
 initErrorHandlers();
@@ -45,9 +47,7 @@ document.getElementById('playerName')?.addEventListener('input', (e) => {
 });
 
 document.getElementById('answerInput')?.addEventListener('input', (e) => {
-    const { currentQuestion, hasAnswered } = await import('./config.js');
     if (currentQuestion && !hasAnswered) {
-        const { fuzzyMatch } = await import('./questions.js');
         const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
         if (matchScore > 0.7) {
             e.target.style.borderColor = '#27ae60';
