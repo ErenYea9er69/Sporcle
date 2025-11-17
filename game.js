@@ -559,6 +559,24 @@ export function overrideAnswer(playerId, markAsCorrect) {
     }
 }
 
+export function toggleAutoNext() {
+    if (!isHost) return;
+    
+    setAutoNextEnabled(!autoNextEnabled);
+    currentRoom.autoNext = autoNextEnabled;
+    QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+    
+    document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
+    
+    if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
+        setTimeout(() => {
+            if (autoNextEnabled && !document.getElementById('answersReveal').classList.contains('hidden')) {
+                nextRound();
+            }
+        }, 3000);
+    }
+}
+
 export function endGame() {
     try {
         if (gameInterval) {
