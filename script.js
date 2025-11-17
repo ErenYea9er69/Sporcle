@@ -7,34 +7,11 @@ import {
 import { initErrorHandlers, logError } from './error-handler.js';
 import { QuizDatabase } from './database.js';
 import { backToHome, startSoloGame, createRoom, joinRoom, startGame, submitAnswer, nextRound, playAgain, toggleAutoNext, endGame } from './game.js';
-import { updateLobbyDisplay, updateGameDisplay, renderCategories, toggleCategory, showCreateRoom, hideCreateRoom, showJoinRoom, hideJoinRoom, showLobby } from './ui.js';
+import { updateLobbyDisplay, updateGameDisplay, renderCategories, toggleCategory, showCreateRoom, hideCreateRoom, showJoinRoom, hideJoinRoom, showLobby, selectPoint } from './ui.js';
 import { fuzzyMatch } from './questions.js';
 
 // Initialize error handlers
 initErrorHandlers();
-
-// Expose all functions to global scope for HTML onclick handlers
-window.QuizBattle = {
-    // UI functions
-    showCreateRoom,
-    hideCreateRoom,
-    showJoinRoom,
-    hideJoinRoom,
-    toggleCategory,
-    selectPoint: (value) => import('./ui.js').then(m => m.selectPoint(value)),
-    
-    // Game functions
-    createRoom,
-    joinRoom,
-    startGame,
-    submitAnswer,
-    nextRound,
-    endGame: () => import('./game.js').then(m => m.endGame()),
-    backToHome,
-    playAgain,
-    startSoloGame,
-    toggleAutoNext
-};
 
 // DOM ready initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,40 +28,136 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.dataset.version = version;
         
         console.log('Quiz Battle initialized successfully (Modular Mode)');
+
+        // Setup all event listeners
+        setupEventListeners();
+        
     } catch (error) {
         logError('App initialization failed', { error: error.message });
     }
 });
 
-// Input validation
-document.getElementById('joinRoomCode')?.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-});
-
-document.getElementById('hostName')?.addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
-});
-
-document.getElementById('playerName')?.addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
-});
-
-document.getElementById('answerInput')?.addEventListener('input', (e) => {
-    if (currentQuestion && !hasAnswered) {
-        const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
-        if (matchScore > 0.7) {
-            e.target.style.borderColor = '#27ae60';
-        } else if (matchScore > 0.4) {
-            e.target.style.borderColor = '#f39c12';
-        } else {
-            e.target.style.borderColor = '#ddd';
-        }
+function setupEventListeners() {
+    // Home screen buttons
+    const createRoomBtn = document.getElementById('createRoomBtn');
+    if (createRoomBtn) {
+        createRoomBtn.addEventListener('click', showCreateRoom);
     }
-});
+
+    const joinRoomBtn = document.getElementById('joinRoomBtn');
+    if (joinRoomBtn) {
+        joinRoomBtn.addEventListener('click', showJoinRoom);
+    }
+
+    const soloModeBtn = document.getElementById('soloModeBtn');
+    if (soloModeBtn) {
+        soloModeBtn.addEventListener('click', startSoloGame);
+    }
+
+    // Create room form
+    const createRoomSubmitBtn = document.getElementById('createRoomSubmitBtn');
+    if (createRoomSubmitBtn) {
+        createRoomSubmitBtn.addEventListener('click', createRoom);
+    }
+
+    const hideCreateRoomBtn = document.getElementById('hideCreateRoomBtn');
+    if (hideCreateRoomBtn) {
+        hideCreateRoomBtn.addEventListener('click', hideCreateRoom);
+    }
+
+    // Join room form
+    const joinRoomSubmitBtn = document.getElementById('joinRoomSubmitBtn');
+    if (joinRoomSubmitBtn) {
+        joinRoomSubmitBtn.addEventListener('click', joinRoom);
+    }
+
+    const hideJoinRoomBtn = document.getElementById('hideJoinRoomBtn');
+    if (hideJoinRoomBtn) {
+        hideJoinRoomBtn.addEventListener('click', hideJoinRoom);
+    }
+
+    // Lobby screen
+    const startGameBtn = document.getElementById('startGameBtn');
+    if (startGameBtn) {
+        startGameBtn.addEventListener('click', startGame);
+    }
+
+    // Game screen
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', submitAnswer);
+    }
+
+    const nextRoundBtn = document.getElementById('nextRoundBtn');
+    if (nextRoundBtn) {
+        nextRoundBtn.addEventListener('click', nextRound);
+    }
+
+    const autoNextToggle = document.getElementById('autoNextToggle');
+    if (autoNextToggle) {
+        autoNextToggle.addEventListener('click', toggleAutoNext);
+    }
+
+    const endGameBtn = document.getElementById('endGameBtn');
+    if (endGameBtn) {
+        endGameBtn.addEventListener('click', endGame);
+    }
+
+    // Game over screen
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    if (playAgainBtn) {
+        playAgainBtn.addEventListener('click', playAgain);
+    }
+
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    if (backToHomeBtn) {
+        backToHomeBtn.addEventListener('click', backToHome);
+    }
+
+    // Input validation
+    const joinRoomCode = document.getElementById('joinRoomCode');
+    if (joinRoomCode) {
+        joinRoomCode.addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+    }
+
+    const hostName = document.getElementById('hostName');
+    if (hostName) {
+        hostName.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
+        });
+    }
+
+    const playerName = document.getElementById('playerName');
+    if (playerName) {
+        playerName.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20);
+        });
+    }
+
+    const answerInput = document.getElementById('answerInput');
+    if (answerInput) {
+        answerInput.addEventListener('input', (e) => {
+            if (currentQuestion && !hasAnswered) {
+                const matchScore = fuzzyMatch(e.target.value, currentQuestion.answer);
+                if (matchScore > 0.7) {
+                    e.target.style.borderColor = '#27ae60';
+                } else if (matchScore > 0.4) {
+                    e.target.style.borderColor = '#f39c12';
+                } else {
+                    e.target.style.borderColor = '#ddd';
+                }
+            }
+        });
+    }
+}
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && document.getElementById('answerInput') === document.activeElement && !hasAnswered) {
+    const answerInput = document.getElementById('answerInput');
+    
+    if (e.key === 'Enter' && answerInput === document.activeElement && !hasAnswered) {
         e.preventDefault();
         submitAnswer();
     }
@@ -133,3 +206,10 @@ window.addEventListener('beforeunload', () => {
         }
     }
 });
+
+// Expose functions to window for debugging (optional)
+window.QuizBattle = {
+    currentRoom: () => currentRoom,
+    currentPlayer: () => currentPlayer,
+    database: QuizDatabase
+};

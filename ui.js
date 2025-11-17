@@ -1,5 +1,6 @@
 // Quiz Battle - UI Renderer
-import { currentRoom, currentPlayer, isHost, currentQuestion, hasAnswered, timeLeft } from './config.js';
+import { currentRoom, currentPlayer, isHost, currentQuestion, hasAnswered, timeLeft, autoNextEnabled } from './config.js';
+import { QuizDatabase } from './database.js';
 import { logError } from './error-handler.js';
 
 export function hideAllScreens() {
@@ -48,7 +49,7 @@ export function renderCategories() {
             <div class="category-icon">${categories[key].icon}</div>
             <div>${categories[key].name}</div>
         `;
-        btn.onclick = () => toggleCategory(key);
+        btn.addEventListener('click', () => toggleCategory(key));
         selector.appendChild(btn);
     });
 
@@ -84,6 +85,11 @@ export function updateLobbyDisplay() {
             categoriesSpan.textContent = currentRoom.categories.join(', ').toUpperCase();
         } else {
             categoriesSpan.textContent = 'MIXED';
+        }
+
+        const lobbyQuestionCount = document.getElementById('lobbyQuestionCount');
+        if (lobbyQuestionCount) {
+            lobbyQuestionCount.textContent = currentRoom.questionCount;
         }
         
         const playerList = document.getElementById('lobbyPlayerList');
@@ -149,7 +155,12 @@ export function updateGameDisplay() {
 
         if (isHost) {
             document.getElementById('hostControls').classList.remove('hidden');
-            document.getElementById('autoNextToggle').classList.toggle('active', autoNextEnabled);
+            const toggle = document.getElementById('autoNextToggle');
+            if (autoNextEnabled) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
         } else {
             document.getElementById('hostControls').classList.add('hidden');
         }
@@ -178,7 +189,7 @@ export function renderPointsGrid() {
         }
         
         if (!btn.classList.contains('used')) {
-            btn.onclick = () => selectPoint(i);
+            btn.addEventListener('click', () => selectPoint(i));
         }
         
         pointsGrid.appendChild(btn);
@@ -189,13 +200,11 @@ export function selectPoint(value) {
     if (hasAnswered || currentPlayer.usedPoints.includes(value)) return;
     
     currentPlayer.selectedPoint = value;
-    // Use the imported QuizDatabase directly
-    import('./database.js').then(module => {
-        module.QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
-    });
+    QuizDatabase.save(`player_${currentPlayer.id}`, currentPlayer);
     
     renderPointsGrid();
 }
+
 export function showLobby() {
     hideAllScreens();
     document.getElementById('lobbyScreen').classList.add('active');

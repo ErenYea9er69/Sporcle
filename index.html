@@ -18,9 +18,9 @@
                 <p class="tagline">Real-time multiplayer quiz game</p>
                 
                 <div class="button-group">
-                    <button onclick="QuizBattle.showCreateRoom()">Create Room</button>
-                    <button class="secondary" onclick="QuizBattle.showJoinRoom()">Join Room</button>
-                    <button class="secondary" onclick="QuizBattle.startSoloGame()">Solo Mode</button>
+                    <button id="createRoomBtn">Create Room</button>
+                    <button class="secondary" id="joinRoomBtn">Join Room</button>
+                    <button class="secondary" id="soloModeBtn">Solo Mode</button>
                 </div>
 
                 <div id="createRoomForm" class="hidden glass-card">
@@ -50,8 +50,8 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <button onclick="QuizBattle.createRoom()">Create Room</button>
-                        <button class="secondary" onclick="QuizBattle.hideCreateRoom()">Back</button>
+                        <button id="createRoomSubmitBtn">Create Room</button>
+                        <button class="secondary" id="hideCreateRoomBtn">Back</button>
                     </div>
                 </div>
 
@@ -64,8 +64,8 @@
                         <input type="text" id="playerName" placeholder="Your name" maxlength="20">
                     </div>
                     <div class="input-group">
-                        <button onclick="QuizBattle.joinRoom()">Join Room</button>
-                        <button class="secondary" onclick="QuizBattle.hideJoinRoom()">Back</button>
+                        <button id="joinRoomSubmitBtn">Join Room</button>
+                        <button class="secondary" id="hideJoinRoomBtn">Back</button>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
             </div>
             
             <div id="hostControlsLobby" class="hidden">
-                <button onclick="QuizBattle.startGame()" style="width: 100%; margin-top: 20px;">Start Game</button>
+                <button id="startGameBtn" style="width: 100%; margin-top: 20px;">Start Game</button>
             </div>
             
             <div id="playerWaitingMessage" class="hidden glass-card">
@@ -100,7 +100,7 @@
             <div class="game-layout">
                 <div class="main-game-area">
                     <div class="game-header">
-                        <div id="gameRoomCode" style="display: none;"></div> <!-- Hidden room code -->
+                        <div id="gameRoomCode" style="display: none;"></div>
                         <div class="round-info">Round <span id="currentRound">1</span> / <span id="totalRounds">10</span></div>
                     </div>
 
@@ -126,7 +126,7 @@
                         <div class="answer-input-container">
                             <input type="text" class="answer-input" id="answerInput" placeholder="Enter your answer..." maxlength="100">
                         </div>
-                        <button class="submit-btn" id="submitBtn" onclick="QuizBattle.submitAnswer()">Submit Answer</button>
+                        <button class="submit-btn" id="submitBtn">Submit Answer</button>
                     </div>
 
                     <div class="answers-reveal hidden" id="answersReveal">
@@ -134,7 +134,7 @@
                         <div class="correct-answer-display" id="correctAnswerDisplay" style="background: var(--accent-win); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 1.1em; font-weight: 500;"></div>
                         <div id="answersList"></div>
                         <div id="hostNextControls" class="hidden" style="margin-top: 20px;">
-                            <button onclick="QuizBattle.nextRound()" style="width: 100%;">Next Round</button>
+                            <button id="nextRoundBtn" style="width: 100%;">Next Round</button>
                         </div>
                     </div>
                 </div>
@@ -149,14 +149,13 @@
                         <h3>Host Controls</h3>
                         <div class="control-group">
                             <label>Auto-next round</label>
-                            <div class="toggle-switch" id="autoNextToggle" onclick="QuizBattle.toggleAutoNext()"></div>
+                            <div class="toggle-switch" id="autoNextToggle"></div>
                         </div>
-                        <button onclick="QuizBattle.endGame()" style="width: 100%; margin-top: 15px;">End Game</button>
+                        <button id="endGameBtn" style="width: 100%; margin-top: 15px;">End Game</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Hidden players grid (removed from display) -->
             <div id="playersGrid" class="hidden"></div>
         </div>
 
@@ -169,8 +168,8 @@
                     <div id="finalScores"></div>
                 </div>
                 <div class="button-group" style="margin-top: 30px;">
-                    <button onclick="QuizBattle.playAgain()">Play Again</button>
-                    <button class="secondary" onclick="QuizBattle.backToHome()">Back to Home</button>
+                    <button id="playAgainBtn">Play Again</button>
+                    <button class="secondary" id="backToHomeBtn">Back to Home</button>
                 </div>
             </div>
         </div>
