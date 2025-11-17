@@ -384,7 +384,8 @@ function createRoom() {
             isActive: false,
             expires: Date.now() + (6 * 60 * 60 * 1000),
             created: Date.now(),
-            autoNext: false
+            autoNext: false,
+            usedQuestions: [] // NEW: Track used questions to prevent repetition
         };
 
         const player = {
@@ -585,6 +586,7 @@ function startGame() {
         currentRoom.isActive = true;
         currentRoom.currentRound = 0;
         currentRoom.started = Date.now();
+        currentRoom.usedQuestions = []; // NEW: Reset used questions when game starts
         
         currentRoom.players.forEach(player => {
             player.score = 0;
@@ -628,7 +630,9 @@ function nextRound() {
         currentRoom.currentRound++;
         QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
 
+        // NEW: Filter out questions that have already been used
         const availableQuestions = currentRoom.questions.filter((q, index) => 
+            !currentRoom.usedQuestions.includes(index) &&
             !currentRoom.players.some(p => 
                 p.answers.some(a => a.questionIndex === index)
             )
@@ -640,6 +644,13 @@ function nextRound() {
         }
 
         currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+        const questionIndex = currentRoom.questions.indexOf(currentQuestion);
+        
+        // NEW: Mark this question as used so it won't appear again
+        if (!currentRoom.usedQuestions.includes(questionIndex)) {
+            currentRoom.usedQuestions.push(questionIndex);
+            QuizDatabase.save(`room_${currentRoom.code}`, currentRoom);
+        }
 
         document.getElementById('currentRound').textContent = currentRoom.currentRound;
         document.getElementById('questionText').textContent = currentQuestion.question;
@@ -1047,6 +1058,7 @@ function playAgain() {
         if (isHost) {
             currentRoom.isActive = false;
             currentRoom.currentRound = 0;
+            currentRoom.usedQuestions = []; // NEW: Reset used questions when playing again
             currentRoom.players.forEach(player => {
                 player.score = 0;
                 player.answers = [];
@@ -1089,7 +1101,8 @@ function startSoloGame() {
             expires: Date.now() + (2 * 60 * 60 * 1000),
             created: Date.now(),
             autoNext: false,
-            isSolo: true
+            isSolo: true,
+            usedQuestions: [] // NEW: Track used questions for solo mode too
         };
 
         currentRoom = room;
