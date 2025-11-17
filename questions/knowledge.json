@@ -1,0 +1,9 @@
+{
+  "questions": [
+    { "question": "What is the capital of Japan?", "answer": ["tokyo"], "points": 10 },
+    { "question": "How many continents are there on Earth?", "answer": ["7", "seven"], "points": 10 },
+    { "question": "What is the largest planet in our solar system?", "answer": ["jupiter"], "points": 10 },
+    { "question": "What is the chemical symbol for gold?", "answer": ["au"], "points": 10 },
+    { "question": "In which year did World War II end?", "answer": ["1945"], "points": 10 }
+  ]
+}

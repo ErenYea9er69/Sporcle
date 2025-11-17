@@ -1,0 +1,9 @@
+{
+  "questions": [
+    { "question": "What is the name of the coffee shop in Friends?", "answer": ["central perk"], "points": 10 },
+    { "question": "Which TV series features a high school chemistry teacher turned drug lord?", "answer": ["breaking bad"], "points": 10 },
+    { "question": "What is the name of the fictional continent in Game of Thrones?", "answer": ["westeros"], "points": 10 },
+    { "question": "Which animated series features a talking baby and a diabolical dog?", "answer": ["family guy"], "points": 10 },
+    { "question": "What is the name of the main character in The Office (US)?", "answer": ["michael scott"], "points": 10 }
+  ]
+}

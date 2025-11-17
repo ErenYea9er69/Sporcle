@@ -1,0 +1,9 @@
+{
+  "questions": [
+    { "question": "What is the name of Goku's signature energy attack?", "answer": ["kamehameha", "kame hame ha"], "points": 10 },
+    { "question": "Which anime features a notebook that can kill people?", "answer": ["death note", "deathnote"], "points": 10 },
+    { "question": "What is the name of the pirate crew led by Monkey D. Luffy?", "answer": ["straw hat pirates", "strawhat pirates", "straw hats"], "points": 10 },
+    { "question": "In 'Naruto', what is the name of Naruto's tailed beast?", "answer": ["kurama", "nine tails", "nine-tails"], "points": 10 },
+    { "question": "Which anime features giant humanoid creatures called Titans?", "answer": ["attack on titan", "shingeki no kyojin"], "points": 10 }
+  ]
+}

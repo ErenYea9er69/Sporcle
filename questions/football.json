@@ -1,0 +1,9 @@
+{
+  "questions": [
+    { "question": "Which country won the FIFA World Cup in 2018?", "answer": ["france"], "points": 10 },
+    { "question": "How many players are on a football team on the field?", "answer": ["11", "eleven"], "points": 10 },
+    { "question": "Which player has won the most Ballon d'Or awards?", "answer": ["lionel messi", "messi"], "points": 10 },
+    { "question": "What is the distance of a penalty kick from the goal line?", "answer": ["12 yards", "11 meters", "eleven meters", "twelve yards"], "points": 10 },
+    { "question": "Which English club has won the most Premier League titles?", "answer": ["manchester united", "man united", "man utd"], "points": 10 }
+  ]
+}
