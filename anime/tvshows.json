@@ -1,0 +1,499 @@
+{
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "What are the dying words of Charles Foster Kane in Citizen Kane?",
+      "answer": "Rosebud"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who played Mrs. Robinson in The Graduate?",
+      "answer": "Anne Bancroft"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What was the first feature-length animated movie ever released?",
+      "answer": "Snow White and the Seven Dwarfs"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In The Matrix, does Neo take the blue pill or the red pill?",
+      "answer": "Red"
+    },
+    {
+      "difficulty": "easy",
+      "question": "For what movie did Tom Hanks score his first Academy Award nomination?",
+      "answer": "Big"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What 1927 musical was the first “talkie”?",
+      "answer": "The Jazz Singer"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What’s the name of the skyscraper in Die Hard?",
+      "answer": "Nakatomi Plaza"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What flavor of Pop-Tarts does Buddy the Elf use in his spaghetti in Elf?",
+      "answer": "Chocolate"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What pop vocal group performs at the wedding in Bridesmaids?",
+      "answer": "Wilson Phillips"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What American writer/director starred in several iconic European-produced “Spaghetti Westerns”?",
+      "answer": "Clint Eastwood"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who played Juror Number 8 in 12 Angry Men?",
+      "answer": "Henry Fonda"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who played park owner John Hammond in Jurassic Park?",
+      "answer": "Richard Attenborough"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In what 1976 thriller does Robert De Niro famously say “You talkin’ to me?”",
+      "answer": "Taxi Driver"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What’s the name of the anthemic dance near the beginning of The Rocky Horror Picture Show?",
+      "answer": "The Time Warp"
+    },
+    {
+      "difficulty": "easy",
+      "question": "For what movie did Steven Spielberg win his first Oscar for Best Director?",
+      "answer": "Schindler’s List"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the name of the courtesan played by Nicole Kidman in Moulin Rouge!?",
+      "answer": "Satine"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Marlon Brando “could have been a contender” in what iconic 1954 crime drama?",
+      "answer": "On the Waterfront"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What famous L.A. landmark is heavily featured in Rebel Without a Cause?",
+      "answer": "Griffith Observatory"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What Hollywood movie star plays himself in Zombieland?",
+      "answer": "Bill Murray"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who is the only actor to receive an Oscar nomination for acting in a Lord of the Rings movie?",
+      "answer": "Ian McKellen"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the highest-grossing R-rated movie of all time?",
+      "answer": "Joker"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What 1994 crime film revitalized John Travolta’s career?",
+      "answer": "Pulp Fiction"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which movie was incorrectly announced as the winner of Best Picture at the 2017 Academy Awards?",
+      "answer": "La La Land"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Well, nobody’s perfect” is the final line (and punchline) from what classic 1959 comedy starring Marilyn Monroe?",
+      "answer": "Some Like it Hot"
+    },
+    {
+      "difficulty": "easy",
+      "question": "The stage play Everybody Comes to Rick’s was adapted for the screen to become what 1942 Best Picture winner?",
+      "answer": "Casablanca"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What animated classic was the first film of the late 20th century “Disney Renaissance?”",
+      "answer": "The Little Mermaid"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In Apocalypse Now, Robert Duvall says, “I love the smell of _____ in the morning.”",
+      "answer": "Napalm"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the name of Quint’s shark-hunting boat in Jaws?",
+      "answer": "The Orca"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What’s the name of Charlie Chaplin’s most famous, recurring character?",
+      "answer": "The Tramp"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Aaron Sorkin won an Oscar for writing what 2010 drama about the creation of Facebook?",
+      "answer": "The Social Network"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the highest-grossing movie of all time when taking inflation into account?",
+      "answer": "Gone with the Wind"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the highest-grossing movie of all time when not taking inflation into account?",
+      "answer": "Avatar"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What’s the Los Angeles hotel prominently featured in Pretty Woman?",
+      "answer": "The Beverly Wilshire by Four Seasons"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What shocking Wes Craven horror movie carried the marketing tagline, “To avoid fainting, keep repeating, ‘It’s only a movie…’”?",
+      "answer": "The Last House on the Left"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What real-life on-again off-again Hollywood power couple starred in the film Who’s Afraid of Virginia Woolf?",
+      "answer": "Elizabeth Taylor and Richard Burton"
+    },
+    {
+      "difficulty": "medium",
+      "question": "The head of what kind of animal is front-and-center in an infamous scene from The Godfather?",
+      "answer": "A horse"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What TV show was Jack Nicholson referencing when he ad-libbed “Here’s Johnny!” in The Shining?",
+      "answer": "The Tonight Show Starring Johnny Carson"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In what 1950 drama does Bette Davis say, “Fasten your seatbelts; it’s going to be a bumpy night”?",
+      "answer": "All About Eve"
+    },
+    {
+      "difficulty": "medium",
+      "question": "The theme from The Third Man (also called “The Harry Lime Theme”) was performed on what instrument?",
+      "answer": "Zither"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who played Martin Luther King Jr. in the 2014 biopic Selma?",
+      "answer": "David Oyelowo"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who directed Boris Karloff in the classics Frankenstein and Bride of Frankenstein?",
+      "answer": "James Whale"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In Risky Business, what song did Tom Cruise famously lip-sync to in his underwear?",
+      "answer": "Old Time Rock and Roll by Bob Seger"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who took over the role of Bruce Wayne’s love interest Rachel Dawes in The Dark Knight, following Katie Holmes’ exit after Batman Begins?",
+      "answer": "Maggie Gyllenhaal"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What song plays over the opening credits of Guardians of the Galaxy?",
+      "answer": "Come and Get Your Love by Redbone"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who voiced the sultry Jessica Rabbit in Who’s Afraid of Roger Rabbit?",
+      "answer": "Kathleen Turner"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which 1948 Alfred Hitchcock movie starred James Stewart and was shot to look like one continuous take?",
+      "answer": "Rope"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In what 1979 James Bond movie does the famous spy go to outer space?",
+      "answer": "Moonraker"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who wrote the famous, scary theme music from Halloween?",
+      "answer": "John Carpenter"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who played iconic femme fatale Phyllis Dietrichson in the classic 1946 film noir Double Indemnity?",
+      "answer": "Barbara Stanwyck"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which 1927 war drama was the first movie to ever win Best Picture?",
+      "answer": "Wings"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who is the first actor to play Jack Ryan on screen?",
+      "answer": "Alec Baldwin"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What was Audrey Hepburn’s birth name?",
+      "answer": "Audrey Kathleen Ruston"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which famous film composer wrote the music for Tim Burton’s 1989 Batman?",
+      "answer": "Danny Elfman"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the highest-grossing foreign-language film at the U.S. box office?",
+      "answer": "The Passion of the Christ"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What national monument does Cary Grant climb in the heart-pounding final moments of North by Northwest?",
+      "answer": "Mount Rushmore"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which actress’s name, who voices Princess Elsa in the Frozen films, did John Travolta botch at the 2014 Oscars?",
+      "answer": "Idina Menzel"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What movie holds the record for most Oscar wins without winning Best Picture (eight wins total)?",
+      "answer": "Cabaret"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In what 1969 James Bond thriller does the famous spy fall in love and get married?",
+      "answer": "On Her Majesty’s Secret Service"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the first movie ever to be rated PG-13?",
+      "answer": "Red Dawn (1984)"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the only X-rated film to win Best Picture at the Oscars?",
+      "answer": "Midnight Cowboy"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What company is the Bluths’ main rival in Arrested Development?",
+      "answer": "Sitwell"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which thriller series gave Hollywood stars Jennifer Garner and Bradley Cooper their big breaks?",
+      "answer": "Alias"
+    },
+    {
+      "difficulty": "medium",
+      "question": "This famous American talk show host and producer (dubbed “the Queen of All Media”) went on to form her own television network in 2011.",
+      "answer": "Oprah Winfrey"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What are the “big three” commercial broadcast television networks in the US?",
+      "answer": "CBS, NBC, and ABC"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What coffee shop were the “Friends” always hanging out in on the sitcom Friends?",
+      "answer": "Central Perk"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What critically panned 1984 country-musical comedy starring Dolly Parton and Sylvester Stallone eventually became a cult classic?",
+      "answer": "Rhinestone"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What infamous 1980 box-office bomb ruined the career of The Deer Hunter director Michael Cimino?",
+      "answer": "Heaven’s Gate"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What words are written on the knuckles of “Reverend” Harry Powell (Robert Mitchum) in The Night of the Hunter?",
+      "answer": "Love and hate"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is the model of revolver made famous by Clint Eastwood’s “Dirty” Harry Callahan?",
+      "answer": "Smith & Wesson Model 29 .44 Magnum"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What 1970 movie marked the feature debut of Arnold Schwarzenegger?",
+      "answer": "Hercules in New York"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which TV series is responsible for launching Bruce Willis’s career?",
+      "answer": "Moonlighting"
+    },
+    {
+      "difficulty": "hard",
+      "question": "How many seasons did The Oprah Winfrey Show run for?",
+      "answer": "25"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In which American variety TV show did The Simpsons first make their debut?",
+      "answer": "The Tracey Ullman Show"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What instrument did the unnamed “Mother” play on How I Met Your Mother?",
+      "answer": "The bass"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Bob’s Burgers, what is the name of Gail’s large (cranky) grey cat?",
+      "answer": "Mr. Business"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which classic sitcom is actually a spinoff of Perfect Strangers?",
+      "answer": "Family Matters"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What’s the one episode of Seinfeld that George Costanza doesn’t appear in?",
+      "answer": "The Pen"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which actress guest-starred on Friends as Phoebe’s twin sister?",
+      "answer": "Helen Hunt"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In the Seinfeld pilot, Kramer’s name isn’t actually Kramer. What is it?",
+      "answer": "Kessler"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What department of Columbia University does Captain Holt’s husband work in on Brooklyn Nine-Nine?",
+      "answer": "The Classics Department"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Fresh Off the Boat, what is the Huangs’ restaurant called?",
+      "answer": "Cattletown Ranch"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In the Office’s season 2 episode “The Injury,” what appliance does Michael burn his foot on?",
+      "answer": "A George Foreman grill"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is Jason Mendoza’s favorite NFL team on The Good Place?",
+      "answer": "The Jacksonville Jaguars"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What memento does Jamie keep in his hat in Blue Bloods?",
+      "answer": "A picture of his brother, Joe"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In which reality show did the popstar Kesha appear before her rise to fame?",
+      "answer": "The Simple Life"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Charlie’s Angels first aired as a TV show in 1976. How many “Angels” star on Charlie’s Angels at a time?",
+      "answer": "3"
+    },
+    {
+      "difficulty": "hard",
+      "question": "For how many seasons did Ed Asner play Lou Grant in the series Lou Grant?",
+      "answer": "5"
+    },
+    {
+      "difficulty": "hard",
+      "question": "How many castaways were stranded on Gilligan’s Island?",
+      "answer": "Seven"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In what year did Star Trek: The Next Generation first air?",
+      "answer": "1987"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In which long-running series did Peter Falk play a rumpled yet shrewd homicide detective?",
+      "answer": "Columbo"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who was the first actor to play “The Doctor” on the long-running sci-fi series Doctor Who?",
+      "answer": "William Hartnell"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What does Golden Girl Dorothy Zbornak do for a living on The Golden Girls?",
+      "answer": "She’s a substitute teacher"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is the Munster family’s street address on The Munsters?",
+      "answer": "1313 Mockingbird Lane"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What animal is the Looney Tunes character Foghorn J. Leghorn?",
+      "answer": "A rooster"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which acclaimed anthology TV show was created by Rod Serling, exploring various sci-fi, fantasy, and dystopian themes?",
+      "answer": "The Twilight Zone"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Where did Roseanne work in the original Roseanne series?",
+      "answer": "The Lunchbox"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What was the name of Samatha’s ever-suspicious neighbor in Bewitched?",
+      "answer": "Gladys Kravitz"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which cartoon character is famous for saying, “Hey Boo Boo, let’s go get us a pic-a-nic basket!”",
+      "answer": "Yogi Bear"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is the name of the Happy Days spinoff show?",
+      "answer": "Laverne and Shirley"
+    }
+  ]
+}

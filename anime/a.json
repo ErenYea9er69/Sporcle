@@ -102,68 +102,8 @@
     },
     {
       "difficulty": "easy",
-      "question": "Who is a member of an extraterrestrial warrior race called the Saiyans?",
-      "answer": "Goku"
-    },
-    {
-      "difficulty": "easy",
       "question": "Who is the navigator of the Straw Hat Pirates?",
       "answer": "Nami"
-    },
-    {
-      "difficulty": "easy",
-      "question": "What kind of person is Naruto Uzumaki?",
-      "answer": "A ninja"
-    },
-    {
-      "difficulty": "easy",
-      "question": "How do you do a Naruto run?",
-      "answer": "Put your head forward and arms back"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Which famous anime series takes you on a wild pirate ride with a stretchy, straw-hat-wearing captain named Monkey D. Luffy?",
-      "answer": "One Piece"
-    },
-    {
-      "difficulty": "easy",
-      "question": "In 'Attack on Titan,' who charges into battle against giants with unmatched passion?",
-      "answer": "Eren Yeager"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Who conjured up the world of ninjas, epic battles, and endless ramen cravings in the legendary series 'Naruto'?",
-      "answer": "Masashi Kishimoto"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Mixing magic and mayhem, which anime follows the epic quest of a pint-sized alchemist, Edward Elric, on his quest for redemption?",
-      "answer": "Fullmetal Alchemist"
-    },
-    {
-      "difficulty": "easy",
-      "question": "In the mind-bending world of 'Death Note,' who is the quirky, sweets-obsessed detective determined to crack the case of the mysterious Kira?",
-      "answer": "L Lawliet (L)"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Channeling cosmic vibes and schoolgirl chic, what’s the name of the magical heroine who transforms the night with moonlit magic in 'Sailor Moon'?",
-      "answer": "Usagi Tsukino (Serena)"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Time to power up! Who’s the spiky-haired Saiyan whose appetite for adventure—and food—has become legendary in 'Dragon Ball'?",
-      "answer": "Goku"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Who leaps headlong into the spirit world, battling hollows with a trusty sword, and proving that even a regular teen can rock a cool destiny in 'Bleach'?",
-      "answer": "Ichigo Kurosaki"
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hop on your broomstick and soar into whimsy! Which Studio Ghibli classic, directed by Hayao Miyazaki, follows a young witch mastering the art of delivery?",
-      "answer": "Kiki's Delivery Service"
     },
     {
       "difficulty": "medium",
@@ -209,11 +149,6 @@
       "difficulty": "medium",
       "question": "What is the highest grossing anime movie of all time?",
       "answer": "Demon Slayer the Movie: Mugen Train"
-    },
-    {
-      "difficulty": "medium",
-      "question": "What movie was not animated by Studio Ghibli?",
-      "answer": "Your Name"
     },
     {
       "difficulty": "medium",
