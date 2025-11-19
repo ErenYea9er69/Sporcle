@@ -1,0 +1,499 @@
+{
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "What country is anime from?",
+      "answer": "Japan"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who directed the movie ‘Princess Mononoke’?",
+      "answer": "Hayao Miyazaki"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What sport is featured in Captain Tsubasa?",
+      "answer": "Football"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What was the first anime movie to win an Oscar?",
+      "answer": "Spirited Away"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What anime series follow the adventures of Goku?",
+      "answer": "Dragon Ball Z"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is Ash’s surname in Pokemon?",
+      "answer": "Ketchum"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who is Edward’s brother in ‘Fullmetal Alchemist: Brotherhood’?",
+      "answer": "Alphonse Elric"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What creature is Ponyo?",
+      "answer": "A goldfish"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What anime series is often abbreviated as CCS?",
+      "answer": "Cardcaptor Sakura"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In Your Name, what happens to the girl and the boy?",
+      "answer": "They swap bodies"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which Pokémon has electricity-storing pouches on its cheeks?",
+      "answer": "Pikachu"
+    },
+    {
+      "difficulty": "easy",
+      "question": "How many Dragon Balls are there?",
+      "answer": "Seven"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who solved the Millennium Puzzle?",
+      "answer": "Yugi Mutou"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which anime series revolves around a boy who sells his soul to a demon?",
+      "answer": "Black Butler"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Whose body gained the properties of rubber after unintentionally eating a Devil Fruit?",
+      "answer": "Monkey D. Luffy"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who protects the Silver Crystal?",
+      "answer": "Sailor Moon"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which anime series revolves around the Elric brothers?",
+      "answer": "Fullmetal Alchemist"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the greatest taboo for the alchemists in ‘Fullmetal Alchemist’?",
+      "answer": "Human transmutation"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who is the main protagonist of the Pokémon anime series?",
+      "answer": "Ash"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What is the longest-running anime series?",
+      "answer": "Sazae-san"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who is a member of an extraterrestrial warrior race called the Saiyans?",
+      "answer": "Goku"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who is the navigator of the Straw Hat Pirates?",
+      "answer": "Nami"
+    },
+    {
+      "difficulty": "easy",
+      "question": "What kind of person is Naruto Uzumaki?",
+      "answer": "A ninja"
+    },
+    {
+      "difficulty": "easy",
+      "question": "How do you do a Naruto run?",
+      "answer": "Put your head forward and arms back"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Which famous anime series takes you on a wild pirate ride with a stretchy, straw-hat-wearing captain named Monkey D. Luffy?",
+      "answer": "One Piece"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In 'Attack on Titan,' who charges into battle against giants with unmatched passion?",
+      "answer": "Eren Yeager"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who conjured up the world of ninjas, epic battles, and endless ramen cravings in the legendary series 'Naruto'?",
+      "answer": "Masashi Kishimoto"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Mixing magic and mayhem, which anime follows the epic quest of a pint-sized alchemist, Edward Elric, on his quest for redemption?",
+      "answer": "Fullmetal Alchemist"
+    },
+    {
+      "difficulty": "easy",
+      "question": "In the mind-bending world of 'Death Note,' who is the quirky, sweets-obsessed detective determined to crack the case of the mysterious Kira?",
+      "answer": "L Lawliet (L)"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Channeling cosmic vibes and schoolgirl chic, what’s the name of the magical heroine who transforms the night with moonlit magic in 'Sailor Moon'?",
+      "answer": "Usagi Tsukino (Serena)"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Time to power up! Who’s the spiky-haired Saiyan whose appetite for adventure—and food—has become legendary in 'Dragon Ball'?",
+      "answer": "Goku"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Who leaps headlong into the spirit world, battling hollows with a trusty sword, and proving that even a regular teen can rock a cool destiny in 'Bleach'?",
+      "answer": "Ichigo Kurosaki"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hop on your broomstick and soar into whimsy! Which Studio Ghibli classic, directed by Hayao Miyazaki, follows a young witch mastering the art of delivery?",
+      "answer": "Kiki's Delivery Service"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What type of Pokemon is Hitmonchan?",
+      "answer": "Fighting"
+    },
+    {
+      "difficulty": "medium",
+      "question": "How old is Chihiro in ‘Spirited Away’?",
+      "answer": "10"
+    },
+    {
+      "difficulty": "medium",
+      "question": "During which century is ‘Princess Mononoke’ set?",
+      "answer": "14th"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What was the first magical girl anime?",
+      "answer": "Sally the Witch"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What percentage of the world’s animation is anime?",
+      "answer": "60%"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does the Witch of Waste transform Sophie into in ‘Howl’s Moving Castle’?",
+      "answer": "An old lady"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What anime is set on Planet Aqua?",
+      "answer": "Aria the Animation"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What does Yurie become in the first episode of ‘Kamichu!’?",
+      "answer": "A goddess"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the highest grossing anime movie of all time?",
+      "answer": "Demon Slayer the Movie: Mugen Train"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What movie was not animated by Studio Ghibli?",
+      "answer": "Your Name"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In what animal did Chihiro’s parents turn into in ‘Spirited Away’?",
+      "answer": "Pigs"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What sport is featured in ‘Haikyuu!!’?",
+      "answer": "Volleyball"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Who created the series ‘Naruto’?",
+      "answer": "Masashi Kishimoto"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the name of the two girls in ‘My Neighbor Totoro’?",
+      "answer": "Mei and Satsuki"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What anime movie tells the story of the Clock family?",
+      "answer": "Arrietty"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Complete the title of this anime movie ___________ of the Valley of the Wind”.",
+      "answer": "Nausicaä"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Sheeta and Colonel Muska are characters in which anime movie?",
+      "answer": "Castle in the Sky"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What are the big 3?",
+      "answer": "One Piece, Naruto and Bleach"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which character is nicknamed the ‘Black Swordsman’?",
+      "answer": "Guts from Berserk"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the name of the anime district in Tokyo?",
+      "answer": "Akihabara"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In the anime ‘Claymore’, who was the most powerful of the ‘Awakened Beings’?",
+      "answer": "Priscilla"
+    },
+    {
+      "difficulty": "medium",
+      "question": "An outcast prince takes over the revolution by controlling the mind of others. Who is he?",
+      "answer": "Lelouch Lamperouge"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Lover of sweets and mysteries, which genius is a world-famous detective?",
+      "answer": "L"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Do you know who voiced our metallic Alchemist, Alphonse Elric from ‘Fullmetal Alchemist: Brotherhood’?",
+      "answer": "Rie Kugimiya"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Can you name the director of the ‘Death Note’ 2017 Movie?",
+      "answer": "Adam Wingard"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Name the voice actor behind the catching pika-pika of Pikachu from ‘Pokemon’.",
+      "answer": "Ikue Otani"
+    },
+    {
+      "difficulty": "medium",
+      "question": "This voice actress has the range from Haruhi in ‘Ouran HighSchool Host Club’ to Ciel of ‘Black Butler’.",
+      "answer": "Maaya Sakamoto"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In the anime ‘Hunter X Hunter’, which family is famous for being assassins?",
+      "answer": "Killua’s family"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Whose Zanpakuto is Wabisuke in ‘Bleach’ and had a crush on Hinamori Momo?",
+      "answer": "Kira Izuru"
+    },
+    {
+      "difficulty": "medium",
+      "question": "What is the name of the first Shinigami that Ichigo met in ‘Bleach’?",
+      "answer": "His dad"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Kaneki was tortured for ten days. Even his hair turned white from black, and his fingers and toes were cut off. Who did this to him?",
+      "answer": "Yamori"
+    },
+    {
+      "difficulty": "medium",
+      "question": "In ‘Clannad’, when Sanae first met Okazaki, which kind of bread does she offer to him?",
+      "answer": "Sweet Bean Bread"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Which is the first song used as an opening for ‘Naruto’?",
+      "answer": "‘Rocks’ by Hound Dog"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What anime movie won an Academy Award for best-animated feature film in 2002?",
+      "answer": "Spirited Away"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is the world’s longest-running anime TV series?",
+      "answer": "Sazae-san"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In which anime series can you see a character named Eren Yeager?",
+      "answer": "Attack on Titan"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What sports competition is featured in ‘From Up on Poppy Hill’?",
+      "answer": "1964 Tokyo Olympics"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What anime movie is a fictionalised biographical film of Jiro Horikoshi?",
+      "answer": "The wind rises"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who is the creator of Dragon Ball?",
+      "answer": "Akira Toriyama"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What are the longest-running Japanese anime studios?",
+      "answer": "Madhouse"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Which seaside town does Futaba Ooki move to in ‘Amanchu!’?",
+      "answer": "Shizuoka"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What convention prides itself as the largest celebration of Japanese pop culture in North America?",
+      "answer": "Anime Expo in LA"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What is the highest-grossing film of One Piece?",
+      "answer": "One Piece Film: Red"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What was Edward and Alphonses’ teacher’s name?",
+      "answer": "Izumi Curtis"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What day will Edward Elric never forget?",
+      "answer": "October 3"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who was the first Homunculus killed in Fullmetal Alchemist Brotherhood?",
+      "answer": "Lust"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Spirited Away, what name did Yubaba give Chihiro?",
+      "answer": "Sen"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What wall did the Titans attack first?",
+      "answer": "Wall Maria"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Fullmetal Alchemist, what country was Amestris at war with?",
+      "answer": "Ishval"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Fullmetal Alchemist, Ling was the prince of ____.",
+      "answer": "Xing"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who was Spike Spiegel’s nemesis?",
+      "answer": "Vicious"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Cowboy Bebop, what was Ed’s nickname?",
+      "answer": "Radical Edward"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who did we see die first in The Promised Neverland?",
+      "answer": "Conny"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Who killed Yona’s father in Akatsuki no Yona?",
+      "answer": "Soo-Won"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Howl goes by these last names:",
+      "answer": "Pendragon and Jenkins"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Howl’s Moving Castle, why did the Witch of the Waste curse Sophie?",
+      "answer": "She was jealous of Howl giving Sophie attention"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Why did Sophie remain an old woman for so long?",
+      "answer": "She thought she wasn’t beautiful as a young girl and preferred to look old"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Calcifer was bonded with Howl’s _____.",
+      "answer": "Heart"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Jujutsu Kaisen, what’s Magumi Fushiguro’s sisters name?",
+      "answer": "Tsumiki"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Jujutsu Kaisen, how many fingers did Yuji eat by the end of the first season?",
+      "answer": "3"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Jujutsu Kaisen, what is Yuji’s type in girls?",
+      "answer": "Tall girls with big butts and Jennifer Lawrence"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Kaguya-Sama Love is War, what is Chika’s dog’s name?",
+      "answer": "Pes"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Noragami, Yato was the god of _____.",
+      "answer": "Calamity/war"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Death Note, who was Misa Misa’s Shinigami?",
+      "answer": "Rem"
+    },
+    {
+      "difficulty": "hard",
+      "question": "In Death Note, why did Misa Misa fall in love with Light?",
+      "answer": "He killed her parents murderer"
+    },
+    {
+      "difficulty": "hard",
+      "question": "What are the names of the twins in Ouran High School Host Club?",
+      "answer": "Hikaru and Kaoru"
+    }
+  ]
+}
