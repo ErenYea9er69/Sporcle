@@ -127,8 +127,8 @@
     },
     {
       "difficulty": "medium",
-      "question": "What percentage of the world’s animation is anime?",
-      "answer": "60%"
+      "question": "Quote: 'I am the bone of my sword. Steel is my body and fire is my blood.' Who said this?",
+      "answer": "Shirou Emiya (from Fate/Stay Night)"
     },
     {
       "difficulty": "medium",
@@ -247,8 +247,8 @@
     },
     {
       "difficulty": "medium",
-      "question": "What is the name of the first Shinigami that Ichigo met in ‘Bleach’?",
-      "answer": "His dad"
+      "question": "Quote: 'I am a Soul Reaper.' Who says this in Bleach?",
+      "answer": "Rukia Kuchiki"
     },
     {
       "difficulty": "medium",
@@ -264,16 +264,6 @@
       "difficulty": "medium",
       "question": "Which is the first song used as an opening for ‘Naruto’?",
       "answer": "‘Rocks’ by Hound Dog"
-    },
-    {
-      "difficulty": "hard",
-      "question": "What anime movie won an Academy Award for best-animated feature film in 2002?",
-      "answer": "Spirited Away"
-    },
-    {
-      "difficulty": "hard",
-      "question": "What is the world’s longest-running anime TV series?",
-      "answer": "Sazae-san"
     },
     {
       "difficulty": "hard",
@@ -294,11 +284,6 @@
       "difficulty": "hard",
       "question": "Who is the creator of Dragon Ball?",
       "answer": "Akira Toriyama"
-    },
-    {
-      "difficulty": "hard",
-      "question": "What are the longest-running Japanese anime studios?",
-      "answer": "Madhouse"
     },
     {
       "difficulty": "hard",
@@ -392,7 +377,7 @@
     },
     {
       "difficulty": "hard",
-      "question": "In Jujutsu Kaisen, what’s Magumi Fushiguro’s sisters name?",
+      "question": "In Jujutsu Kaisen, what’s Megumi Fushiguro’s sister's name?",
       "answer": "Tsumiki"
     },
     {
@@ -402,8 +387,8 @@
     },
     {
       "difficulty": "hard",
-      "question": "In Jujutsu Kaisen, what is Yuji’s type in girls?",
-      "answer": "Tall girls with big butts and Jennifer Lawrence"
+      "question": "Quote: 'Love is the most twisted curse of all.' Who said this in Jujutsu Kaisen?",
+      "answer": "Gojo Satoru"
     },
     {
       "difficulty": "hard",
@@ -429,6 +414,16 @@
       "difficulty": "hard",
       "question": "What are the names of the twins in Ouran High School Host Club?",
       "answer": "Hikaru and Kaoru"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Quote: 'If you win, you live. If you lose, you die. If you don't fight, you can't win!' Who said this?",
+      "answer": "Eren Yeager (from Attack on Titan)"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Quote: 'I am the hope of the universe. I am the answer to all living things that cry out for peace.' Who said this?",
+      "answer": "Goku (from Dragon Ball Z)"
     }
   ]
 }

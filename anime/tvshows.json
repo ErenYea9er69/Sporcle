@@ -97,12 +97,7 @@
     },
     {
       "difficulty": "easy",
-      "question": "Who is the only actor to receive an Oscar nomination for acting in a Lord of the Rings movie?",
-      "answer": "Ian McKellen"
-    },
-    {
-      "difficulty": "easy",
-      "question": "What is the highest-grossing R-rated movie of all time?",
+      "question": "What is the highest-grossing R-rated movie of all time when not adjusted for inflation?",
       "answer": "Joker"
     },
     {
@@ -267,8 +262,8 @@
     },
     {
       "difficulty": "medium",
-      "question": "What is the highest-grossing foreign-language film at the U.S. box office?",
-      "answer": "The Passion of the Christ"
+      "question": "Quote: 'Life finds a way.' Who said this in Jurassic Park?",
+      "answer": "Dr. Ian Malcolm (played by Jeff Goldblum)"
     },
     {
       "difficulty": "medium",
@@ -324,6 +319,16 @@
       "difficulty": "medium",
       "question": "What coffee shop were the “Friends” always hanging out in on the sitcom Friends?",
       "answer": "Central Perk"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Quote: 'Why so serious?' Who said this in The Dark Knight?",
+      "answer": "The Joker (played by Heath Ledger)"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Quote: 'I'll be back.' Who said this in The Terminator?",
+      "answer": "The Terminator (played by Arnold Schwarzenegger)"
     },
     {
       "difficulty": "hard",
@@ -387,8 +392,13 @@
     },
     {
       "difficulty": "hard",
-      "question": "Which actress guest-starred on Friends as Phoebe’s twin sister?",
-      "answer": "Helen Hunt"
+      "question": "Quote: 'One does not simply walk into Mordor.' Who said this in The Lord of the Rings?",
+      "answer": "Boromir (played by Sean Bean)"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Quote: 'How you doin'?' Who said this catchphrase in Friends?",
+      "answer": "Joey Tribbiani (played by Matt LeBlanc)"
     },
     {
       "difficulty": "hard",
